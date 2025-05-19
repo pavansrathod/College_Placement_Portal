@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs Posted | College Placement Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary: #A62C2C;
+      --secondary: #E83F25;
+      --accent: #EA7300;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #EA7300;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --bg-light: #f5f7ff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--bg-light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header styles */
+    header {
+      background-color: white;
+      box-shadow: var(--shadow);
+      padding: 15px 0;
+      margin-bottom: 30px;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-name {
+      font-weight: 500;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+    
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #d90166;
+    }
+    
+    /* Main content */
+    .page-title {
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    
+    .section-title {
+      margin: 25px 0 15px;
+      font-size: 1.5rem;
+      color: var(--secondary);
+    }
+    
+    /* Branch filters */
+    .branch-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .branch-btn {
+      background-color: white;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .branch-btn:hover {
+      background-color: #f0f4ff;
+    }
+    
+    .branch-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    /* Compact job cards */
+    .job-card-compact {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .job-card-compact:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .job-card-compact .job-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .job-card-compact .job-title {
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .job-card-compact .job-company {
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+    
+    .job-card-compact .applicant-count {
+      background-color: var(--primary);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+    }
+    
+    /* Expanded job cards */
+    .job-card-expanded {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+      display: none; /* Hidden by default */
+    }
+    
+    .job-expanded-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+    
+    .job-expanded-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .job-detail {
+      margin-bottom: 8px;
+    }
+    
+    .job-detail strong {
+      color: var(--dark);
+    }
+    
+    .job-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* Applicants section */
+    .applicants-section {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #f8f9fa;
+    }
+    
+    .applicants-title {
+      font-size: 1.1rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    
+    .applicant-list {
+      list-style-type: none;
+    }
+    
+    .applicant-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .applicant-item:last-child {
+      border-bottom: none;
+    }
+    
+    .applicant-link {
+      color: var(--primary);
+      text-decoration: none;
+      margin-left: 5px;
+    }
+    
+    .applicant-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Loading and error states */
+    .loading, .error {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .loading {
+      color: var(--secondary);
+    }
+    
+    .error {
+      color: var(--danger);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .job-actions {
+        flex-direction: column;
+      }
+      
+      .branch-filters {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Common Header/Navbar -->
+  <header class="header">
+    <div class="logo">College Placement Portal</div>
+    <div class="user-info">
+      <div>
+        <span id="userName" class="user-name"></span>
+        <span id="userRole" class="user-role"></span>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Your Posted Jobs</h1>
+    
+    <div class="actions">
+      <a href="dashboard.html" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+    
+    <!-- Branch filters -->
+    <div class="section-title">Filter by Branch</div>
+    <div id="branchFilters" class="branch-filters">
+      <button class="branch-btn active" data-branch="all">All Jobs</button>
+      <!-- Branch buttons will be added dynamically -->
+    </div>
+    
+    <!-- Job listings will be loaded here -->
+    <div id="jobList" class="jobs-section">
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Loading your posted jobs...
+      </div>
+    </div>
+    
+    <!-- Container for jobs -->
+    <div id="jobsContainer" style="display: none;">
+      <div id="allJobs"></div>
+      <div id="branchJobs"></div>
+    </div>
+    
+    <!-- Error display -->
+    <div id="errorJobs" style="display: none;" class="error">
+      <i class="fas fa-exclamation-triangle"></i> <span id="errorMessage">Error loading jobs</span>
+    </div>
+    
+    <!-- Loading display -->
+    <div id="loadingJobs" style="display: none;" class="loading">
+      <i class="fas fa-spinner fa-spin"></i> Loading jobs...
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    // Base URL for API calls
+    const serverBaseUrl = "http://localhost:5000";
+    let userData = null;
+    let allJobs = []; // Store all jobs
+    let activeBranch = 'all'; // Currently active branch filter
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadJobs();
+    });
+    
+    // Load jobs posted by current officer
+    function loadJobs() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+      
+      const jobsContainer = document.getElementById('jobsContainer');
+      const loadingElement = document.getElementById('loadingJobs');
+      const errorElement = document.getElementById('errorJobs');
+      const jobList = document.getElementById('jobList');
+      
+      // Show loading
+      if (loadingElement) loadingElement.style.display = 'block';
+      if (errorElement) errorElement.style.display = 'none';
+      if (jobsContainer) jobsContainer.style.display = 'none';
+      if (jobList) jobList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading your posted jobs...</div>';
+      
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userData = payload;
+      } catch (err) {
+        console.error("Error parsing token:", err);
+        if (errorElement) {
+          errorElement.style.display = 'block';
+          const errorMessageEl = document.getElementById('errorMessage');
+          if (errorMessageEl) errorMessageEl.textContent = `Error parsing token: ${err.message}`;
+        }
+        if (loadingElement) loadingElement.style.display = 'none';
+        return;
+      }
+      
+      fetch(`${serverBaseUrl}/api/jobs`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(jobs => {
+          console.log("Jobs data received:", jobs);
+          // Hide loading
+          if (loadingElement) loadingElement.style.display = 'none';
+          
+          // Filter jobs posted by the current officer
+          const officerId = userData.id;
+          allJobs = jobs.filter(job => job.postedBy && job.postedBy._id && job.postedBy._id === officerId);
+          
+          if (jobList) {
+            if (allJobs.length === 0) {
+              // Show no jobs message
+              jobList.innerHTML = `
+                <div class="card">
+                  <h3 class="card-title">Your Posted Jobs</h3>
+                  <p class="card-description">You haven't posted any jobs yet.</p>
+                  <div style="margin-top: 15px;">
+                    <a href="post-job.html" class="btn btn-primary">Post a Job</a>
+                  </div>
+                </div>
+              `;
+            } else {
+              // Set up branch filters
+              setupBranchFilters(allJobs);
+              
+              // Show jobs
+              displayJobs(allJobs);
+            }
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching jobs:", err);
+          if (loadingElement) loadingElement.style.display = 'none';
+          if (errorElement) {
+            errorElement.style.display = 'block';
+            const errorMessageEl = document.getElementById('errorMessage');
+            if (errorMessageEl) errorMessageEl.textContent = `Error loading jobs: ${err.message}`;
+          }
+          if (jobList) {
+            jobList.innerHTML = `
+              <div class="error">
+                <i class="fas fa-exclamation-triangle"></i> 
+                Error loading jobs: ${err.message}. Please try again later.
+              </div>
+            `;
+          }
+        });
+    }
+    
+    // Set up branch filter buttons
+    function setupBranchFilters(jobs) {
+      const branchFilters = document.getElementById('branchFilters');
+      if (!branchFilters) return;
+      
+      // Get all unique branches
+      const branches = new Set();
+      jobs.forEach(job => {
+        if (job.branches && job.branches.length) {
+          job.branches.forEach(branch => branches.add(branch));
+        }
+      });
+      
+      // Create branch buttons
+      branches.forEach(branch => {
+        const branchBtn = document.createElement('button');
+        branchBtn.className = 'branch-btn';
+        branchBtn.setAttribute('data-branch', branch);
+        branchBtn.textContent = branch;
+        branchBtn.addEventListener('click', () => filterJobsByBranch(branch));
+        branchFilters.appendChild(branchBtn);
+      });
+      
+      // Add event listener to 'All Jobs' button
+      const allJobsBtn = branchFilters.querySelector('[data-branch="all"]');
+      if (allJobsBtn) {
+        allJobsBtn.addEventListener('click', () => filterJobsByBranch('all'));
+      }
+    }
+    
+    // Filter jobs by branch
+    function filterJobsByBranch(branch) {
+      // Update active button
+      const buttons = document.querySelectorAll('.branch-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-branch') === branch) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      activeBranch = branch;
+      
+      // Filter and display jobs
+      if (branch === 'all') {
+        displayJobs(allJobs);
+      } else {
+        const filteredJobs = allJobs.filter(job => 
+          job.branches && job.branches.includes(branch)
+        );
+        displayJobs(filteredJobs);
+      }
+    }
+    
+    // Display jobs in the job list
+    function displayJobs(jobs) {
+      const jobList = document.getElementById('jobList');
+      if (!jobList) return;
+      
+      // Clear current jobs
+      while (jobList.firstChild) {
+        jobList.removeChild(jobList.firstChild);
+      }
+      
+      // Add section title
+      const title = document.createElement('h2');
+      title.className = 'section-title';
+      title.textContent = activeBranch === 'all' 
+        ? `All Your Posted Jobs (${jobs.length})` 
+        : `${activeBranch} Jobs (${jobs.length})`;
+      jobList.appendChild(title);
+      
+      if (jobs.length === 0) {
+        const noJobsMsg = document.createElement('p');
+        noJobsMsg.textContent = 'No jobs found for this filter.';
+        noJobsMsg.style.textAlign = 'center';
+        noJobsMsg.style.padding = '20px';
+        jobList.appendChild(noJobsMsg);
+        return;
+      }
+      
+      // Create compact and expanded job cards
+      jobs.forEach(job => {
+        // Create compact job card (always visible)
+        const compactCard = document.createElement('div');
+        compactCard.className = 'job-card-compact';
+        compactCard.setAttribute('data-job-id', job._id);
+        compactCard.innerHTML = `
+          <div class="job-info">
+            <div class="job-title">${job.title}</div>
+            <div class="job-company">${job.company}</div>
+          </div>
+          <span class="applicant-count">0 Applicants</span>
+        `;
+        jobList.appendChild(compactCard);
+        
+        // Create expanded job card (hidden by default)
+        const expandedCard = document.createElement('div');
+        expandedCard.className = 'job-card-expanded';
+        expandedCard.id = `job-expanded-${job._id}`;
+        expandedCard.innerHTML = `
+          <div class="job-expanded-header">
+            <div>
+              <h3 class="job-expanded-title">${job.title}</h3>
+              <p class="job-detail"><strong>Company:</strong> ${job.company}</p>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleJobDetails('${job._id}')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          
+          <p class="job-detail"><strong>Salary:</strong> ${job.salary}</p>
+          <p class="job-detail"><strong>Location:</strong> ${job.location || 'Not specified'}</p>
+          <p class="job-detail"><strong>Description:</strong> ${job.description}</p>
+          <p class="job-detail"><strong>Deadline:</strong> ${formatDate(job.deadline)}</p>
+          <p class="job-detail"><strong>Min CGPA:</strong> ${job.minCGPA || 'Not specified'}</p>
+          <p class="job-detail"><strong>Eligible Branches:</strong> ${job.branches && job.branches.length ? job.branches.join(", ") : "All Branches"}</p>
+          
+          <div class="job-actions">
+            <button class="btn btn-primary" onclick="viewApplicants('${job._id}', this)">
+              <i class="fas fa-users"></i> View Applicants
+            </button>
+          </div>
+          
+          <div id="applicants-${job._id}" style="display: none;"></div>
+        `;
+        jobList.appendChild(expandedCard);
+        
+        // Add click event to compact card
+        compactCard.addEventListener('click', () => toggleJobDetails(job._id));
+        
+        // Update applicant count
+        updateApplicantCount(job._id);
+      });
+    }
+    
+    // Toggle job details visibility
+    function toggleJobDetails(jobId) {
+      const expandedCard = document.getElementById(`job-expanded-${jobId}`);
+      if (expandedCard) {
+        // Toggle expanded card visibility
+        if (expandedCard.style.display === 'block') {
+          expandedCard.style.display = 'none';
+        } else {
+          // Hide all other expanded cards
+          document.querySelectorAll('.job-card-expanded').forEach(card => {
+            card.style.display = 'none';
+          });
+          
+          // Show this card
+          expandedCard.style.display = 'block';
+        }
+      }
+    }
+    
+    // Update applicant count for a job
+    function updateApplicantCount(jobId) {
+      const token = localStorage.getItem("token");
+      
+      fetch(`${serverBaseUrl}/api/applications/job/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(apps => {
+          // Update the applicant count in the compact card
+          const compactCards = document.querySelectorAll(`.job-card-compact[data-job-id="${jobId}"]`);
+          compactCards.forEach(card => {
+            const countElement = card.querySelector('.applicant-count');
+            if (countElement) {
+              countElement.textContent = `${apps.length} ${apps.length === 1 ? 'Applicant' : 'Applicants'}`;
+            }
+          });
+        })
+        .catch(err => {
+          console.error(`Error fetching applicants for job ${jobId}:`, err);
+        });
+    }
+    
+    // View applicants for a job
+    function viewApplicants(jobId, button) {
+      const token = localStorage.getItem("token");
+      const container = document.getElementById(`applicants-${jobId}`);
+      
+      // Toggle visibility
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-users"></i> View Applicants';
+        return;
+      }
+      
+      // Show loading
+      container.style.display = 'block';
+      container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading applicants...</div>';
+      button.innerHTML = '<i class="fas fa-times"></i> Hide Applicants';
+      
+      fetch(`${serverBaseUrl}/api/applications/job/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(apps => {
+          if (apps.length === 0) {
+            container.innerHTML = `<div class="applicants-section">No applicants yet.</div>`;
+          } else {
+            container.innerHTML = `
+              <div class="applicants-section">
+                <h4 class="applicants-title">Applicants (${apps.length})</h4>
+                <ul class="applicant-list">
+                  ${apps.map(a => `
+                    <li class="applicant-item">
+                      <strong>${a.student.name}</strong> - ${a.student.email}
+                      ${a.student.resume ? ` | <a href="${serverBaseUrl}${a.student.resume}" target="_blank" class="applicant-link">View Resume</a>` : ''}
+                      <div><strong>Status:</strong> <span style="color: ${getStatusColor(a.status)}">${a.status}</span></div>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            `;
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching applicants:", err);
+          container.innerHTML = `<div class="error">Error loading applicants: ${err.message}</div>`;
+        });
+    }
+    
+    // Get color for status
+    function getStatusColor(status) {
+      const colors = {
+        'applied': '#4361ee',
+        'reviewing': '#f8961e',
+        'interviewed': '#f9c74f',
+        'offered': '#90be6d',
+        'rejected': '#f94144',
+        'accepted': '#277da1'
+      };
+      return colors[status.toLowerCase()] || '#6c757d';
+    }
+    
+    // Format date for display
+    function formatDate(dateString) {
+      if (!dateString) return 'Not specified';
+      
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      } catch (err) {
+        return dateString;
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

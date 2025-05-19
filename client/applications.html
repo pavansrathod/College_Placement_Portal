@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Management - College Placement Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary-color: #A62C2C;
+      --secondary-color: #E83F25;
+      --danger-color: #e74c3c;
+      --warning-color: #EA7300;
+      --dark-color: #34495e;
+      --light-color: #f5f6fa;
+      --gray-color: #95a5a6;
+      --border-radius: 8px;
+      --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f6fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .header {
+      background-color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-name {
+      font-weight: bold;
+    }
+    
+    .user-role {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    
+    .logout-btn {
+      background-color: #f8f9fa;
+      color: var(--danger-color);
+      border: 1px solid var(--danger-color);
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .logout-btn:hover {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .section {
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .filter-input, .filter-select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      flex-grow: 1;
+    }
+    
+    .filter-input:focus, .filter-select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    .btn {
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+      color: var(--danger-color);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: rgba(231, 76, 60, 0.1);
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .app-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .app-table th,
+    .app-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .app-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+    
+    .app-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-applied {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+    
+    .status-shortlisted {
+      background-color: #e8f5e9;
+      color: #388e3c;
+    }
+    
+    .status-interviewed {
+      background-color: #fff8e1;
+      color: #f57f17;
+    }
+    
+    .status-offered {
+      background-color: #e8f5e9;
+      color: #388e3c;
+    }
+    
+    .status-rejected {
+      background-color: #ffebee;
+      color: #d32f2f;
+    }
+    
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+      z-index: 1;
+    }
+    
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      display: block;
+      text-decoration: none;
+      color: #333;
+      cursor: pointer;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #f5f6fa;
+      color: var(--primary-color);
+    }
+    
+    .show {
+      display: block;
+    }
+    
+    .app-detail-container {
+      display: none;
+    }
+    
+    .back-btn {
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: transparent;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+    }
+    
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .app-detail {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+    }
+    
+    .app-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .app-detail-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--dark-color);
+    }
+    
+    .app-detail-company {
+      color: var(--gray-color);
+      margin-top: 0.5rem;
+    }
+    
+    .app-detail-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .app-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .app-info-item {
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: var(--border-radius);
+    }
+    
+    .app-info-label {
+      font-size: 0.8rem;
+      color: var(--gray-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .app-info-value {
+      font-weight: 500;
+    }
+    
+    .app-timeline {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
+    
+    .app-timeline-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+    
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .timeline-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      margin-top: 6px;
+    }
+    
+    .timeline-indicator::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      background-color: #eee;
+      top: 24px;
+      bottom: -24px;
+      left: 5px;
+    }
+    
+    .timeline-item:last-child .timeline-indicator::after {
+      display: none;
+    }
+    
+    .timeline-content {
+      flex: 1;
+    }
+    
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--gray-color);
+    }
+    
+    .timeline-title {
+      font-weight: 500;
+      margin: 0.2rem 0;
+    }
+    
+    .timeline-text {
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .app-info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      
+      .user-info {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      
+      .filter-controls {
+        flex-direction: column;
+      }
+    }
+    
+    /* Company and Branch Organization Styles */
+    .company-section {
+      border-left: 4px solid var(--primary-color);
+      transition: var(--transition);
+    }
+    
+    .company-section:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .job-section {
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      border-left: 3px solid var(--secondary-color);
+    }
+    
+    .branch-section {
+      margin: 0.5rem 0 1rem 1.5rem;
+      padding: 0.5rem;
+      background-color: rgba(52, 152, 219, 0.05);
+      border-radius: var(--border-radius);
+    }
+    
+    .section-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+    
+    .section-toggle-btn:hover {
+      background-color: rgba(52, 152, 219, 0.1);
+    }
+    
+    .section-badge {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: normal;
+      margin-left: 0.5rem;
+    }
+    
+    .branch-badge {
+      background-color: var(--gray-color);
+      color: white;
+    }
+    
+    .job-badge {
+      background-color: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <!-- Common Header/Navbar -->
+  <header class="header">
+    <div class="logo">College Placement Portal</div>
+    <div class="user-info">
+      <div>
+        <span id="userName" class="user-name"></span>
+        <span id="userRole" class="user-role"></span>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Navigation -->
+    <div class="section">
+      <a href="dashboard.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+    
+    <!-- Officer Application Management View -->
+    <div id="officerApplications" style="display: none;">
+      <div class="section">
+        <h2 class="section-title">
+          <i class="fas fa-clipboard-list"></i> Manage Applications
+        </h2>
+        
+        <div class="card">
+          <div class="filter-controls">
+            <select id="companyFilter" class="filter-select">
+              <option value="">All Companies</option>
+              <!-- Will be populated dynamically -->
+            </select>
+            
+            <select id="branchFilter" class="filter-select">
+              <option value="">All Branches</option>
+              <!-- Will be populated dynamically -->
+            </select>
+            
+            <select id="statusFilter" class="filter-select">
+              <option value="">All Statuses</option>
+              <option value="applied">Applied</option>
+              <option value="shortlisted">Shortlisted</option>
+              <option value="interviewed">Interviewed</option>
+              <option value="offered">Offered</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            
+            <input type="text" id="searchInput" class="filter-input" placeholder="Search by student name...">
+            
+            <button class="btn btn-primary" onclick="applyFilters()">
+              <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <button class="btn btn-outline" onclick="clearFilters()">
+              <i class="fas fa-times"></i> Clear Filters
+            </button>
+          </div>
+          
+          <div id="applicationsTable">
+            <div class="loading">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Application Detail View -->
+      <div id="applicationDetail" class="app-detail-container">
+        <!-- Will be populated dynamically -->
+      </div>
+    </div>
+    
+    <!-- Student Applications View -->
+    <div id="studentApplications" style="display: none;">
+      <div class="section">
+        <h2 class="section-title">
+          <i class="fas fa-file-alt"></i> My Applications
+        </h2>
+        
+        <div class="card">
+          <div class="filter-controls">
+            <select id="studentStatusFilter" class="filter-select">
+              <option value="">All Statuses</option>
+              <option value="applied">Applied</option>
+              <option value="shortlisted">Shortlisted</option>
+              <option value="interviewed">Interviewed</option>
+              <option value="offered">Offered</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            
+            <input type="text" id="studentSearchInput" class="filter-input" placeholder="Search by job title...">
+            
+            <button class="btn btn-primary" onclick="applyStudentFilters()">
+              <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <button class="btn btn-outline" onclick="clearStudentFilters()">
+              <i class="fas fa-times"></i> Clear Filters
+            </button>
+          </div>
+          
+          <div id="studentApplicationsTable">
+            <div class="loading">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Student Application Detail View -->
+      <div id="studentApplicationDetail" class="app-detail-container">
+        <!-- Will be populated dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    // Global variables
+    let currentUserRole = '';
+    let currentUserId = '';
+    let officerJobs = [];
+    let allApplications = [];
+    let studentApplications = [];
+    let serverBaseUrl = "http://localhost:5000";
+    
+    // Define the allowed branches globally
+    const allowedBranches = [
+      'Computer Science Engineering',
+      'Information Science',
+      'Electronics and Communication',
+      'AIML', 
+      'Electrical and Electronics',
+      'Civil',
+      'Mechanical',
+      'Chemical'
+    ];
+    
+    // Function to standardize branch names - defined globally
+    function standardizeBranchName(branch) {
+      if (!branch) return 'Not specified';
+      
+      // Convert branch to lowercase for case-insensitive comparison
+      const lowerBranch = branch.toLowerCase();
+      
+      // Map common variations to standardized names
+      if (lowerBranch.includes('computer') || lowerBranch.includes('cse') || lowerBranch === 'cs') {
+        return 'Computer Science Engineering';
+      } else if (lowerBranch.includes('information') || lowerBranch.includes('ise') || lowerBranch === 'is') {
+        return 'Information Science';
+      } else if (lowerBranch.includes('electronic') && lowerBranch.includes('communication') || lowerBranch.includes('ece')) {
+        return 'Electronics and Communication';
+      } else if (lowerBranch.includes('ai') || lowerBranch.includes('ml') || lowerBranch.includes('artificial')) {
+        return 'AIML';
+      } else if (lowerBranch.includes('electric') && lowerBranch.includes('electronic') || lowerBranch.includes('eee')) {
+        return 'Electrical and Electronics';
+      } else if (lowerBranch.includes('civil')) {
+        return 'Civil';
+      } else if (lowerBranch.includes('mech')) {
+        return 'Mechanical';
+      } else if (lowerBranch.includes('chem')) {
+        return 'Chemical';
+      }
+      
+      // If no match found, check if it's close to any of our allowed branches
+      for (const allowed of allowedBranches) {
+        if (lowerBranch.includes(allowed.toLowerCase())) {
+          return allowed;
+        }
+      }
+      
+      // Default to Not specified if no match found
+      return 'Not specified';
+    }
+    
+    // Check server status before initializing
+    async function checkServerStatus() {
+      try {
+        const response = await fetch(`${serverBaseUrl}`, {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Accept': 'text/plain'
+          }
+        });
+        
+        if (response.ok) {
+          console.log("Server is online");
+          return true;
+        } else {
+          console.error("Server returned error status:", response.status);
+          return false;
+        }
+      } catch (error) {
+        console.error("Server connection error:", error);
+        return false;
+      }
+    }
+    
+    // Initialize the page
+    async function initPage() {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+      
+      // Check server status first
+      const serverOnline = await checkServerStatus();
+      if (!serverOnline) {
+        document.getElementById("officerApplications").innerHTML = `
+          <div class="section">
+            <div class="card">
+              <p class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                Server connection error. The server appears to be offline or unreachable.
+              </p>
+              <p>Please try again later or contact your administrator.</p>
+              <button class="btn btn-primary" onclick="window.location.reload()">
+                <i class="fas fa-sync"></i> Refresh Page
+              </button>
+            </div>
+          </div>
+        `;
+        document.getElementById("studentApplications").innerHTML = document.getElementById("officerApplications").innerHTML;
+        return;
+      }
+      
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        currentUserRole = payload.role;
+        currentUserId = payload.id;
+        
+        // Update header info
+        document.getElementById("userName").innerText = payload.name;
+        document.getElementById("userRole").innerText = currentUserRole.toUpperCase();
+        
+        // Show the appropriate view based on user role
+        if (currentUserRole === "officer") {
+          document.getElementById("officerApplications").style.display = "block";
+          loadOfficerJobs(token);
+        } else if (currentUserRole === "student") {
+          document.getElementById("studentApplications").style.display = "block";
+          loadStudentApplications(token);
+        } else {
+          alert("Unauthorized access.");
+          window.location.href = "login.html";
+        }
+      } catch (error) {
+        console.error("Error parsing token:", error);
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+    }
+    
+    // Load jobs posted by the officer
+    async function loadOfficerJobs(token) {
+      try {
+        document.getElementById("applicationsTable").innerHTML = 
+          '<div class="loading"><div class="spinner"></div></div>';
+        
+        // First check if the token is valid
+        if (!token) {
+          throw new Error("Authentication token is missing");
+        }
+        
+        const response = await fetch(`${serverBaseUrl}/api/jobs`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Server response:", response.status, errorData);
+          throw new Error(`Failed to fetch jobs (Status: ${response.status})`);
+        }
+        
+        const jobs = await response.json();
+        
+        // Check if the jobs array is valid
+        if (!Array.isArray(jobs)) {
+          console.error("Invalid jobs data:", jobs);
+          throw new Error("Invalid response format from server");
+        }
+        
+        officerJobs = jobs.filter(job => job.postedBy && job.postedBy._id === currentUserId);
+        
+        // Populate company filter instead of job filter 
+        // (job filter was replaced with company filter in the UI)
+        const companyFilter = document.getElementById("companyFilter");
+        if (companyFilter) {
+          companyFilter.innerHTML = '<option value="">All Companies</option>';
+        }
+        
+        // Load all applications for this officer's jobs
+        loadAllApplications(token);
+      } catch (error) {
+        console.error("Error loading jobs:", error);
+        
+        // Provide a more specific error message based on the error
+        let errorMessage = "Error loading jobs. ";
+        
+        if (error.message.includes("Authentication")) {
+          errorMessage += "Your session may have expired. Please try logging in again.";
+          // Optionally redirect to login page after a delay
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 3000);
+        } else if (error.message.includes("Failed to fetch")) {
+          errorMessage += "Cannot connect to the server. Please check your internet connection or try again later.";
+        } else {
+          errorMessage += "Please try again or contact support if the problem persists.";
+        }
+        
+        document.getElementById("applicationsTable").innerHTML = 
+          `<p class="error-message"><i class="fas fa-exclamation-circle"></i> ${errorMessage}</p>
+           <button class="btn btn-primary" onclick="retryLoadJobs()">
+             <i class="fas fa-sync"></i> Retry
+           </button>`;
+      }
+    }
+    
+    // Function to retry loading jobs
+    function retryLoadJobs() {
+      const token = localStorage.getItem("token");
+      loadOfficerJobs(token);
+    }
+    
+    // Function to retry loading applications
+    function retryLoadApplications() {
+      const token = localStorage.getItem("token");
+      loadAllApplications(token);
+    }
+    
+    // Load all applications for the officer's jobs
+    async function loadAllApplications(token) {
+      try {
+        const jobIds = officerJobs.map(job => job._id);
+        
+        const tableContainer = document.getElementById("applicationsTable");
+        if (!tableContainer) {
+          console.error("Error: applicationsTable element not found");
+          return;
+        }
+        
+        if (jobIds.length === 0) {
+          tableContainer.innerHTML = 
+            `<div class="card">
+              <p>You have not posted any jobs yet.</p>
+              <a href="post-job.html" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Post a Job
+              </a>
+            </div>`;
+          return;
+        }
+        
+        tableContainer.innerHTML = 
+          '<div class="loading"><div class="spinner"></div></div>';
+        
+        // We'll fetch applications for each job and combine them
+        allApplications = [];
+        let errorOccurred = false;
+        
+        for (const jobId of jobIds) {
+          try {
+            const response = await fetch(`${serverBaseUrl}/api/applications/job/${jobId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            if (!response.ok) {
+              console.error(`Failed to fetch applications for job ${jobId} (Status: ${response.status})`);
+              errorOccurred = true;
+              continue;
+            }
+            
+            const applications = await response.json();
+            
+            // Add job details to each application for easier reference
+            const job = officerJobs.find(j => j._id === jobId);
+            const appsWithJobDetails = applications.map(app => ({
+              ...app,
+              jobTitle: job.title,
+              jobCompany: job.company
+            }));
+            
+            allApplications = [...allApplications, ...appsWithJobDetails];
+          } catch (err) {
+            console.error(`Error processing job ${jobId}:`, err);
+            errorOccurred = true;
+          }
+        }
+        
+        // Populate company filter
+        populateCompanyFilter();
+        
+        // Populate branch filter
+        populateBranchFilter();
+        
+        // Render applications by company and branch
+        renderApplicationsByCompanyAndBranch(allApplications);
+        
+        // Show warning if some jobs failed to load
+        if (errorOccurred) {
+          const warningEl = document.createElement('div');
+          warningEl.className = 'error-message';
+          warningEl.style.backgroundColor = 'rgba(243, 156, 18, 0.1)';
+          warningEl.style.color = 'var(--warning-color)';
+          warningEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Some applications could not be loaded. The data shown may be incomplete.';
+          
+          const tableContainer = document.getElementById("applicationsTable");
+          if (tableContainer) {
+            tableContainer.prepend(warningEl);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading applications:", error);
+        
+        let errorMessage = "Error loading applications. ";
+        
+        if (error.message && error.message.includes("Failed to fetch")) {
+          errorMessage += "Cannot connect to the server. Please check your internet connection.";
+        } else {
+          errorMessage += "Please try again or contact support if the problem persists.";
+        }
+        
+        const tableContainer = document.getElementById("applicationsTable");
+        if (tableContainer) {
+          tableContainer.innerHTML = 
+            `<p class="error-message"><i class="fas fa-exclamation-circle"></i> ${errorMessage}</p>
+             <button class="btn btn-primary" onclick="retryLoadApplications()">
+               <i class="fas fa-sync"></i> Retry
+             </button>`;
+        }
+      }
+    }
+    
+    // Populate company filter dropdown
+    function populateCompanyFilter() {
+      const companyFilter = document.getElementById("companyFilter");
+      if (!companyFilter) return;
+      
+      // Get unique companies
+      const companies = [...new Set(allApplications.map(app => app.jobCompany))];
+      
+      // Clear existing options except the first one
+      companyFilter.innerHTML = '<option value="">All Companies</option>';
+      
+      // Add company options
+      companies.forEach(company => {
+        const option = document.createElement("option");
+        option.value = company;
+        option.textContent = company;
+        companyFilter.appendChild(option);
+      });
+    }
+    
+    // Populate branch filter dropdown
+    function populateBranchFilter() {
+      const branchFilter = document.getElementById("branchFilter");
+      if (!branchFilter) return;
+      
+      // Clear existing options except the first one
+      branchFilter.innerHTML = '<option value="">All Branches</option>';
+      
+      // Add branch options from the allowed branches list
+      allowedBranches.forEach(branch => {
+        const option = document.createElement("option");
+        option.value = branch;
+        option.textContent = branch;
+        branchFilter.appendChild(option);
+      });
+    }
+    
+    // Render applications grouped by company and branch
+    function renderApplicationsByCompanyAndBranch(applications) {
+      const tableContainer = document.getElementById("applicationsTable");
+      
+      if (applications.length === 0) {
+        tableContainer.innerHTML = `
+          <div class="card">
+            <p>No applications found for your posted jobs.</p>
+            <p class="card-description">
+              You have posted jobs, but haven't received any applications yet.
+              Share your job postings with students to receive applications.
+            </p>
+          </div>`;
+        return;
+      }
+      
+      // Create a summary card
+      const summaryCard = document.createElement("div");
+      summaryCard.className = "card";
+      summaryCard.style.marginBottom = "1.5rem";
+      
+      // Count applications by status
+      const statusCounts = applications.reduce((counts, app) => {
+        counts[app.status] = (counts[app.status] || 0) + 1;
+        return counts;
+      }, {});
+      
+      summaryCard.innerHTML = `
+        <h3>Applications Summary</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+          <div style="background-color: #f8f9fa; padding: 1rem; border-radius: var(--border-radius); flex: 1;">
+            <div style="font-size: 2rem; font-weight: bold;">${applications.length}</div>
+            <div>Total Applications</div>
+          </div>
+          ${Object.entries(statusCounts).map(([status, count]) => `
+            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: var(--border-radius); flex: 1;">
+              <div style="font-size: 2rem; font-weight: bold;">${count}</div>
+              <div>${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      tableContainer.innerHTML = '';
+      tableContainer.appendChild(summaryCard);
+      
+      // Group applications by company
+      const applicationsByCompany = {};
+      applications.forEach(app => {
+        const company = app.jobCompany || 'Unknown Company';
+        if (!applicationsByCompany[company]) {
+          applicationsByCompany[company] = [];
+        }
+        applicationsByCompany[company].push(app);
+      });
+      
+      // Loop through companies
+      Object.keys(applicationsByCompany).sort().forEach(company => {
+        const companyApplications = applicationsByCompany[company];
+        
+        // Create company section
+        const companySection = document.createElement('div');
+        companySection.className = 'company-section card';
+        companySection.style.marginBottom = '2rem';
+        
+        // Create company header
+        const companyHeader = document.createElement('div');
+        companyHeader.style.borderBottom = '1px solid #eee';
+        companyHeader.style.marginBottom = '1rem';
+        companyHeader.style.paddingBottom = '0.5rem';
+        companyHeader.innerHTML = `
+          <h3 style="display: flex; justify-content: space-between; align-items: center;">
+            <span>${company} <span class="badge" style="background-color: var(--primary-color); color: white; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: normal;">${companyApplications.length} Applications</span></span>
+            <button onclick="toggleCompanySection('${company}')" class="btn btn-outline" style="padding: 0.3rem 0.5rem;">
+              <i id="${company}-toggle-icon" class="fas fa-chevron-right"></i>
+            </button>
+          </h3>
+        `;
+        companySection.appendChild(companyHeader);
+        
+        // Create collapsible content div
+        const companyContent = document.createElement('div');
+        companyContent.id = `${company}-content`;
+        companyContent.style.display = 'none'; // Initially collapsed
+        companySection.appendChild(companyContent);
+        
+        // Group applications by job within company
+        const applicationsByJob = {};
+        companyApplications.forEach(app => {
+          const jobTitle = app.jobTitle || 'Unknown Job';
+          if (!applicationsByJob[jobTitle]) {
+            applicationsByJob[jobTitle] = [];
+          }
+          applicationsByJob[jobTitle].push(app);
+        });
+        
+        // Create job sections within company
+        Object.keys(applicationsByJob).sort().forEach(job => {
+          const jobApplications = applicationsByJob[job];
+          
+          // Create job header
+          const jobHeader = document.createElement('div');
+          jobHeader.style.marginBottom = '1rem';
+          jobHeader.style.paddingLeft = '0.5rem';
+          jobHeader.style.borderLeft = '3px solid var(--primary-color)';
+          jobHeader.innerHTML = `
+            <h4>${job} <span class="badge" style="background-color: var(--secondary-color); color: white; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: normal;">${jobApplications.length} Applications</span></h4>
+          `;
+          companyContent.appendChild(jobHeader);
+          
+          // Group applications by branch within job
+          const applicationsByBranch = {};
+          jobApplications.forEach(app => {
+            // Standardize the branch name
+            const branch = standardizeBranchName(app.student && app.student.department);
+            
+            if (!applicationsByBranch[branch]) {
+              applicationsByBranch[branch] = [];
+            }
+            applicationsByBranch[branch].push(app);
+          });
+          
+          // Create branch sections within job, only for allowed branches
+          allowedBranches.forEach(branch => {
+            if (applicationsByBranch[branch] && applicationsByBranch[branch].length > 0) {
+              const branchApplications = applicationsByBranch[branch];
+              
+              // Create branch header
+              const branchHeader = document.createElement('div');
+              branchHeader.style.marginBottom = '0.5rem';
+              branchHeader.style.marginLeft = '1rem';
+              branchHeader.style.display = 'flex';
+              branchHeader.style.justifyContent = 'space-between';
+              branchHeader.style.alignItems = 'center';
+              branchHeader.innerHTML = `
+                <h5 style="color: var(--dark-color); font-size: 1.1rem;">
+                  ${branch} Branch <span class="badge" style="background-color: #95a5a6; color: white; padding: 0.1rem 0.4rem; border-radius: 20px; font-size: 0.75rem; font-weight: normal;">${branchApplications.length} Students</span>
+                </h5>
+                <button onclick="toggleBranchSection('${branch}-${job}')" class="btn btn-outline" style="padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+                  <i id="${branch}-${job}-toggle-icon" class="fas fa-chevron-right"></i>
+                </button>
+              `;
+              companyContent.appendChild(branchHeader);
+              
+              // Create branch content
+              const branchContent = document.createElement('div');
+              branchContent.id = `${branch}-${job}-content`;
+              branchContent.style.display = 'none'; // Initially collapsed
+              companyContent.appendChild(branchContent);
+              
+              // Create table for branch applications
+              const table = document.createElement('table');
+              table.className = 'app-table';
+              table.style.marginLeft = '1rem';
+              table.style.marginBottom = '1.5rem';
+              table.style.width = 'calc(100% - 1rem)';
+              
+              // Create table header
+              const thead = document.createElement('thead');
+              thead.innerHTML = `
+                <tr>
+                  <th>Student</th>
+                  <th>Email</th>
+                  <th>CGPA</th>
+                  <th>Applied Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              `;
+              table.appendChild(thead);
+              
+              // Create table body
+              const tbody = document.createElement('tbody');
+              
+              branchApplications.forEach(app => {
+                const tr = document.createElement('tr');
+                
+                // Format the date
+                const appliedDate = new Date(app.appliedAt).toLocaleDateString();
+                
+                tr.innerHTML = `
+                  <td>${app.student && app.student.name ? app.student.name : 'Unknown Student'}</td>
+                  <td>${app.student && app.student.email ? app.student.email : 'Unknown Email'}</td>
+                  <td>${app.student && app.student.cgpa ? app.student.cgpa : 'N/A'}</td>
+                  <td>${appliedDate}</td>
+                  <td>
+                    <span class="status-badge status-${app.status}">
+                      ${app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline" onclick="viewApplicationDetail('${app._id}')">
+                      <i class="fas fa-eye"></i> View
+                    </button>
+                  </td>
+                `;
+                
+                tbody.appendChild(tr);
+              });
+              
+              table.appendChild(tbody);
+              branchContent.appendChild(table);
+            }
+          });
+          
+          // Handle Unknown Branch or other non-standard branches
+          if (applicationsByBranch['Not specified'] && applicationsByBranch['Not specified'].length > 0) {
+            const branchApplications = applicationsByBranch['Not specified'];
+            
+            const branchHeader = document.createElement('div');
+            branchHeader.style.marginBottom = '0.5rem';
+            branchHeader.style.marginLeft = '1rem';
+            branchHeader.style.display = 'flex';
+            branchHeader.style.justifyContent = 'space-between';
+            branchHeader.style.alignItems = 'center';
+            branchHeader.innerHTML = `
+              <h5 style="color: var(--dark-color); font-size: 1.1rem;">
+                Not Specified Branch <span class="badge" style="background-color: #95a5a6; color: white; padding: 0.1rem 0.4rem; border-radius: 20px; font-size: 0.75rem; font-weight: normal;">${branchApplications.length} Students</span>
+              </h5>
+              <button onclick="toggleBranchSection('notspecified-${job}')" class="btn btn-outline" style="padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+                <i id="notspecified-${job}-toggle-icon" class="fas fa-chevron-right"></i>
+              </button>
+            `;
+            companyContent.appendChild(branchHeader);
+            
+            const branchContent = document.createElement('div');
+            branchContent.id = `notspecified-${job}-content`;
+            branchContent.style.display = 'none';
+            companyContent.appendChild(branchContent);
+            
+            const table = document.createElement('table');
+            table.className = 'app-table';
+            table.style.marginLeft = '1rem';
+            table.style.marginBottom = '1.5rem';
+            table.style.width = 'calc(100% - 1rem)';
+            
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+              <tr>
+                <th>Student</th>
+                <th>Email</th>
+                <th>CGPA</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            `;
+            table.appendChild(thead);
+            
+            const tbody = document.createElement('tbody');
+            
+            branchApplications.forEach(app => {
+              const tr = document.createElement('tr');
+              const appliedDate = new Date(app.appliedAt).toLocaleDateString();
+              
+              tr.innerHTML = `
+                <td>${app.student && app.student.name ? app.student.name : 'Unknown Student'}</td>
+                <td>${app.student && app.student.email ? app.student.email : 'Unknown Email'}</td>
+                <td>${app.student && app.student.cgpa ? app.student.cgpa : 'N/A'}</td>
+                <td>${appliedDate}</td>
+                <td>
+                  <span class="status-badge status-${app.status}">
+                    ${app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-outline" onclick="viewApplicationDetail('${app._id}')">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                </td>
+              `;
+              
+              tbody.appendChild(tr);
+            });
+            
+            table.appendChild(tbody);
+            branchContent.appendChild(table);
+          }
+        });
+        
+        tableContainer.appendChild(companySection);
+      });
+    }
+    
+    // Toggle company section visibility
+    function toggleCompanySection(company) {
+      const content = document.getElementById(`${company}-content`);
+      const icon = document.getElementById(`${company}-toggle-icon`);
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.className = 'fas fa-chevron-down';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fas fa-chevron-right';
+      }
+    }
+    
+    // Toggle branch section visibility
+    function toggleBranchSection(branchId) {
+      const content = document.getElementById(`${branchId}-content`);
+      const icon = document.getElementById(`${branchId}-toggle-icon`);
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.className = 'fas fa-chevron-down';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fas fa-chevron-right';
+      }
+    }
+    
+    // Filter applications for officers
+    function applyFilters() {
+      const company = document.getElementById("companyFilter").value;
+      const branch = document.getElementById("branchFilter").value;
+      const status = document.getElementById("statusFilter").value;
+      const searchText = document.getElementById("searchInput").value.toLowerCase();
+      
+      let filteredApplications = [...allApplications];
+      
+      if (company) {
+        filteredApplications = filteredApplications.filter(app => app.jobCompany === company);
+      }
+      
+      if (branch) {
+        filteredApplications = filteredApplications.filter(app => {
+          if (!app.student || !app.student.department) return false;
+          // Use standardizeBranchName to match branches
+          return standardizeBranchName(app.student.department) === branch;
+        });
+      }
+      
+      if (status) {
+        filteredApplications = filteredApplications.filter(app => app.status === status);
+      }
+      
+      if (searchText) {
+        filteredApplications = filteredApplications.filter(app => 
+          (app.student && app.student.name && app.student.name.toLowerCase().includes(searchText)) ||
+          (app.student && app.student.email && app.student.email.toLowerCase().includes(searchText))
+        );
+      }
+      
+      renderApplicationsByCompanyAndBranch(filteredApplications);
+    }
+    
+    // Load applications for the student
+    async function loadStudentApplications(token) {
+      try {
+        document.getElementById("studentApplicationsTable").innerHTML = 
+          '<div class="loading"><div class="spinner"></div></div>';
+        
+        if (!token) {
+          throw new Error("Authentication token is missing");
+        }
+        
+        const response = await fetch(`${serverBaseUrl}/api/applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Server response:", response.status, errorData);
+          throw new Error(`Failed to fetch applications (Status: ${response.status})`);
+        }
+        
+        studentApplications = await response.json();
+        
+        // Check if the applications array is valid
+        if (!Array.isArray(studentApplications)) {
+          console.error("Invalid applications data:", studentApplications);
+          throw new Error("Invalid response format from server");
+        }
+        
+        renderStudentApplicationsTable(studentApplications);
+      } catch (error) {
+        console.error("Error loading student applications:", error);
+        
+        // Provide a more specific error message based on the error
+        let errorMessage = "Error loading your applications. ";
+        
+        if (error.message.includes("Authentication")) {
+          errorMessage += "Your session may have expired. Please try logging in again.";
+          // Optionally redirect to login page after a delay
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 3000);
+        } else if (error.message.includes("Failed to fetch")) {
+          errorMessage += "Cannot connect to the server. Please check your internet connection or try again later.";
+        } else {
+          errorMessage += "Please try again or contact support if the problem persists.";
+        }
+        
+        document.getElementById("studentApplicationsTable").innerHTML = 
+          `<p class="error-message"><i class="fas fa-exclamation-circle"></i> ${errorMessage}</p>
+           <button class="btn btn-primary" onclick="retryLoadStudentApplications()">
+             <i class="fas fa-sync"></i> Retry
+           </button>`;
+      }
+    }
+    
+    // Function to retry loading student applications
+    function retryLoadStudentApplications() {
+      const token = localStorage.getItem("token");
+      loadStudentApplications(token);
+    }
+    
+    // Render the applications table for students
+    function renderStudentApplicationsTable(applications) {
+      const tableContainer = document.getElementById("studentApplicationsTable");
+      
+      if (applications.length === 0) {
+        tableContainer.innerHTML = `
+          <div class="card">
+            <p>You have not applied to any jobs yet.</p>
+            <p class="card-description">
+              Check out available jobs on the dashboard and submit your applications.
+            </p>
+            <a href="dashboard.html" class="btn btn-primary">
+              <i class="fas fa-search"></i> Browse Available Jobs
+            </a>
+          </div>`;
+        return;
+      }
+      
+      // Create a summary card
+      const summaryCard = document.createElement("div");
+      summaryCard.className = "card";
+      summaryCard.style.marginBottom = "1.5rem";
+      
+      // Count applications by status
+      const statusCounts = applications.reduce((counts, app) => {
+        counts[app.status] = (counts[app.status] || 0) + 1;
+        return counts;
+      }, {});
+      
+      summaryCard.innerHTML = `
+        <h3>My Applications</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+          <div style="background-color: #f8f9fa; padding: 1rem; border-radius: var(--border-radius); flex: 1;">
+            <div style="font-size: 2rem; font-weight: bold;">${applications.length}</div>
+            <div>Total Applications</div>
+          </div>
+          ${Object.entries(statusCounts).map(([status, count]) => `
+            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: var(--border-radius); flex: 1;">
+              <div style="font-size: 2rem; font-weight: bold;">${count}</div>
+              <div>${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      tableContainer.innerHTML = '';
+      tableContainer.appendChild(summaryCard);
+      
+      const table = document.createElement("table");
+      table.className = "app-table";
+      
+      // Create table header
+      const thead = document.createElement("thead");
+      thead.innerHTML = `
+        <tr>
+          <th>Job Title</th>
+          <th>Company</th>
+          <th>Applied Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      `;
+      table.appendChild(thead);
+      
+      // Create table body
+      const tbody = document.createElement("tbody");
+      
+      applications.forEach(app => {
+        const tr = document.createElement("tr");
+        
+        // Format the date
+        const appliedDate = new Date(app.appliedAt).toLocaleDateString();
+        
+        // Add null checks for job property
+        const jobTitle = app.job && app.job.title ? app.job.title : 'Unknown Job';
+        const jobCompany = app.job && app.job.company ? app.job.company : 'Unknown Company';
+        
+        tr.innerHTML = `
+          <td>${jobTitle}</td>
+          <td>${jobCompany}</td>
+          <td>${appliedDate}</td>
+          <td>
+            <span class="status-badge status-${app.status}">
+              ${app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline" onclick="viewStudentApplicationDetail('${app._id}')">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        `;
+        
+        tbody.appendChild(tr);
+      });
+      
+      table.appendChild(tbody);
+      tableContainer.appendChild(table);
+    }
+    
+    // View application details (for officer)
+    function viewApplicationDetail(appId) {
+      try {
+        console.log("Viewing application details for ID:", appId);
+        
+        // Find the application object
+        const application = allApplications.find(app => app._id === appId);
+        if (!application) {
+          console.error("Application not found with ID:", appId);
+          alert("Error: Application not found");
+          return;
+        }
+        
+        // Debug log
+        console.log("Found application:", application);
+        
+        // Ensure student data is available
+        if (!application.student) {
+          application.student = {
+            name: "Not available",
+            email: "Not available",
+            department: "Not specified",
+            rollNumber: "Not specified",
+            cgpa: "Not specified"
+          };
+        }
+        
+        // Hide applications list and show detail view
+        const applicationsList = document.querySelector("#officerApplications > div:first-child");
+        const detailContainer = document.getElementById("applicationDetail");
+        
+        if (!applicationsList || !detailContainer) {
+          console.error("Required DOM elements not found:", { 
+            applicationsList: !!applicationsList, 
+            detailContainer: !!detailContainer 
+          });
+          alert("Error: Required page elements not found");
+          return;
+        }
+        
+        // Hide list and show details
+        applicationsList.style.display = "none";
+        detailContainer.style.display = "block";
+        
+        // Format dates
+        const appliedDate = application.appliedAt ? new Date(application.appliedAt).toLocaleString() : "Not available";
+        const shortlistedDate = application.shortlistedAt ? new Date(application.shortlistedAt).toLocaleString() : null;
+        const interviewedDate = application.interviewedAt ? new Date(application.interviewedAt).toLocaleString() : null;
+        const offeredDate = application.offeredAt ? new Date(application.offeredAt).toLocaleString() : null;
+        const rejectedDate = application.rejectedAt ? new Date(application.rejectedAt).toLocaleString() : null;
+        
+        // Safe access to student properties
+        const studentName = application.student.name || "Not available";
+        const studentEmail = application.student.email || "Not available";
+        const studentDepartment = standardizeBranchName(application.student.department);
+        const studentRollNumber = application.student.rollNumber || "Not specified";
+        const studentCgpa = application.student.cgpa || "Not specified";
+        
+        // Build timeline events
+        let timelineEvents = [
+          { date: appliedDate, title: 'Applied', text: `${studentName} applied for this position.` }
+        ];
+        
+        if (shortlistedDate) {
+          timelineEvents.push({ date: shortlistedDate, title: 'Shortlisted', text: 'Candidate was shortlisted for further consideration.' });
+        }
+        
+        if (interviewedDate) {
+          timelineEvents.push({ date: interviewedDate, title: 'Interviewed', text: 'Candidate was interviewed for the position.' });
+        }
+        
+        if (offeredDate) {
+          timelineEvents.push({ date: offeredDate, title: 'Offered', text: 'Job offer was extended to the candidate.' });
+        }
+        
+        if (rejectedDate) {
+          timelineEvents.push({ date: rejectedDate, title: 'Rejected', text: 'Candidate was not selected for the position.' });
+        }
+        
+        // Define status order for chronological workflow enforcement
+        const statusOrder = {
+          "applied": 1,
+          "shortlisted": 2,
+          "interviewed": 3,
+          "offered": 4,
+          "rejected": 4 // same level as offered, an alternative final state
+        };
+        
+        // Determine which options to show based on current status
+        const currentStatusOrder = statusOrder[application.status] || 1;
+        
+        // Check if current status is offered (special case)
+        const isOffered = application.status === "offered";
+        
+        // Generate dropdown options based on current status
+        const dropdownOptions = [
+          { status: "applied", label: "Mark as Applied", order: 1 },
+          { status: "shortlisted", label: "Mark as Shortlisted", order: 2 },
+          { status: "interviewed", label: "Mark as Interviewed", order: 3 },
+          { status: "offered", label: "Mark as Offered", order: 4 },
+          { status: "rejected", label: "Mark as Rejected", order: 4 }
+        ].filter(option => {
+          // Filter out "rejected" option if current status is "offered"
+          if (isOffered && option.status === "rejected") {
+            return false;
+          }
+          
+          // Don't show the current status in the dropdown
+          if (option.status === application.status) {
+            return false;
+          }
+          
+          // Only show options with order >= current status order (no backward movement)
+          return option.order >= currentStatusOrder;
+        }).map(option => 
+          `<div class="dropdown-item" onclick="updateApplicationStatus('${appId}', '${option.status}')">${option.label}</div>`
+        ).join('');
+        
+        // Render the detail view
+        const detailHTML = `
+          <button class="back-btn" onclick="backToApplicationsList()">
+            <i class="fas fa-arrow-left"></i> Back to Applications List
+          </button>
+          
+          <div class="app-detail">
+            <div class="app-detail-header">
+              <div>
+                <h2 class="app-detail-title">${application.jobTitle || application.job?.title || 'Unknown Job'}</h2>
+                <p class="app-detail-company">${application.jobCompany || application.job?.company || 'Unknown Company'}</p>
+              </div>
+              <div class="app-detail-actions">
+                <div class="dropdown">
+                  <button class="btn btn-primary" onclick="toggleStatusDropdown('${appId}')">
+                    <i class="fas fa-edit"></i> Change Status
+                  </button>
+                  <div id="statusDropdown-${appId}" class="dropdown-content">
+                    ${dropdownOptions}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="app-info-grid">
+              <div class="app-info-item">
+                <div class="app-info-label">Student Name</div>
+                <div class="app-info-value">${studentName}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Email</div>
+                <div class="app-info-value">${studentEmail}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Department</div>
+                <div class="app-info-value">${studentDepartment}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Roll Number</div>
+                <div class="app-info-value">${studentRollNumber}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">CGPA</div>
+                <div class="app-info-value">${studentCgpa}</div>
+              </div>
+            </div>
+            
+            <div class="card" style="margin: 1.5rem 0;">
+              <h3 style="margin-bottom: 0.5rem;">Application Status</h3>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>
+                  <span class="status-badge status-${application.status}" style="font-size: 1.1rem; padding: 0.5rem 1rem;">
+                    ${application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                  </span>
+                </p>
+                <div class="dropdown">
+                  <button class="btn btn-primary" onclick="toggleStatusDropdown('${appId}')">
+                    <i class="fas fa-edit"></i> Change Status
+                  </button>
+                  <div id="statusDropdown-${appId}" class="dropdown-content">
+                    ${dropdownOptions}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            ${application.student.resume ? `
+              <div style="margin-bottom: 1.5rem;">
+                <a href="${serverBaseUrl}${application.student.resume}" target="_blank" class="btn btn-outline">
+                  <i class="fas fa-file-pdf"></i> View Resume
+                </a>
+              </div>
+            ` : ''}
+            
+            <div class="card" style="margin-top: 1.5rem;">
+              <h3 style="margin-bottom: 1rem;">Application Notes</h3>
+              <div style="margin-bottom: 1rem;">
+                <textarea id="applicationNotes" class="filter-input" style="width: 100%; min-height: 100px;">${application.notes || ''}</textarea>
+              </div>
+              <button class="btn btn-primary" onclick="saveApplicationNotes('${appId}')">
+                <i class="fas fa-save"></i> Save Notes
+              </button>
+              <p id="notesSaveMsg" style="margin-top: 0.5rem; color: var(--secondary-color);"></p>
+            </div>
+            
+            <div class="app-timeline">
+              <h3 class="app-timeline-title">Application Timeline</h3>
+              
+              ${timelineEvents.map(event => `
+                <div class="timeline-item">
+                  <div class="timeline-indicator"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-date">${event.date}</div>
+                    <h4 class="timeline-title">${event.title}</h4>
+                    <p class="timeline-text">${event.text}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        // Set the innerHTML
+        detailContainer.innerHTML = detailHTML;
+        
+        // Log success
+        console.log("Application detail view successfully rendered");
+      } catch (error) {
+        console.error("Error in viewApplicationDetail function:", error);
+        alert("An error occurred while trying to view application details. Please try again.");
+      }
+    }
+    
+    // View application details (for student)
+    function viewStudentApplicationDetail(appId) {
+      try {
+        console.log("Viewing student application details for ID:", appId);
+        
+        // Find the application object
+        const application = studentApplications.find(app => app._id === appId);
+        if (!application) {
+          console.error("Application not found with ID:", appId);
+          alert("Error: Application not found");
+          return;
+        }
+        
+        // Debug log
+        console.log("Found student application:", application);
+        
+        // Ensure job data is available
+        if (!application.job) {
+          application.job = {
+            title: "Unknown Job",
+            company: "Unknown Company",
+            description: "No description available",
+            salary: "Not specified",
+            location: "Not specified"
+          };
+        }
+        
+        // Hide applications list and show detail view
+        const applicationsList = document.querySelector("#studentApplications > div:first-child");
+        const detailContainer = document.getElementById("studentApplicationDetail");
+        
+        if (!applicationsList || !detailContainer) {
+          console.error("Required DOM elements not found:", { 
+            applicationsList: !!applicationsList, 
+            detailContainer: !!detailContainer 
+          });
+          alert("Error: Required page elements not found");
+          return;
+        }
+        
+        // Hide list and show details
+        applicationsList.style.display = "none";
+        detailContainer.style.display = "block";
+        
+        // Format dates
+        const appliedDate = application.appliedAt ? new Date(application.appliedAt).toLocaleString() : "Not available";
+        const shortlistedDate = application.shortlistedAt ? new Date(application.shortlistedAt).toLocaleString() : null;
+        const interviewedDate = application.interviewedAt ? new Date(application.interviewedAt).toLocaleString() : null;
+        const offeredDate = application.offeredAt ? new Date(application.offeredAt).toLocaleString() : null;
+        const rejectedDate = application.rejectedAt ? new Date(application.rejectedAt).toLocaleString() : null;
+        
+        // Safe access to job properties
+        const jobTitle = application.job.title || "Unknown Job";
+        const jobCompany = application.job.company || "Unknown Company";
+        const jobDescription = application.job.description || "No description available";
+        const jobSalary = application.job.salary || "Not specified";
+        const jobLocation = application.job.location || "Not specified";
+        
+        // Build timeline events
+        let timelineEvents = [
+          { date: appliedDate, title: 'Applied', text: `You applied for this position.` }
+        ];
+        
+        if (shortlistedDate) {
+          timelineEvents.push({ date: shortlistedDate, title: 'Shortlisted', text: 'You were shortlisted for further consideration.' });
+        }
+        
+        if (interviewedDate) {
+          timelineEvents.push({ date: interviewedDate, title: 'Interviewed', text: 'You were interviewed for the position.' });
+        }
+        
+        if (offeredDate) {
+          timelineEvents.push({ date: offeredDate, title: 'Offered', text: 'Congratulations! A job offer was extended to you.' });
+        }
+        
+        if (rejectedDate) {
+          timelineEvents.push({ date: rejectedDate, title: 'Rejected', text: 'Unfortunately, you were not selected for the position.' });
+        }
+        
+        // Render the detail view
+        detailContainer.innerHTML = `
+          <button class="back-btn" onclick="backToStudentApplicationsList()">
+            <i class="fas fa-arrow-left"></i> Back to Applications List
+          </button>
+          
+          <div class="app-detail">
+            <div class="app-detail-header">
+              <div>
+                <h2 class="app-detail-title">${jobTitle}</h2>
+                <p class="app-detail-company">${jobCompany}</p>
+              </div>
+            </div>
+            
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h3 style="margin-bottom: 0.5rem;">Application Status</h3>
+              <p>
+                <span class="status-badge status-${application.status}" style="font-size: 1.1rem; padding: 0.5rem 1rem;">
+                  ${application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                </span>
+              </p>
+            </div>
+            
+            <div class="app-info-grid">
+              <div class="app-info-item">
+                <div class="app-info-label">Description</div>
+                <div class="app-info-value">${jobDescription}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Salary</div>
+                <div class="app-info-value">${jobSalary}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Location</div>
+                <div class="app-info-value">${jobLocation}</div>
+              </div>
+              <div class="app-info-item">
+                <div class="app-info-label">Applied Date</div>
+                <div class="app-info-value">${appliedDate}</div>
+              </div>
+            </div>
+            
+            <div class="app-timeline">
+              <h3 class="app-timeline-title">Application Timeline</h3>
+              
+              ${timelineEvents.map(event => `
+                <div class="timeline-item">
+                  <div class="timeline-indicator"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-date">${event.date}</div>
+                    <h4 class="timeline-title">${event.title}</h4>
+                    <p class="timeline-text">${event.text}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            ${application.notes ? `
+              <div class="card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;">Feedback/Notes</h3>
+                <div style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                  ${application.notes}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        
+        // Log success
+        console.log("Student application detail view successfully rendered");
+      } catch (error) {
+        console.error("Error in viewStudentApplicationDetail function:", error);
+        alert("An error occurred while trying to view application details. Please try again.");
+      }
+    }
+    
+    // Toggle status dropdown
+    function toggleStatusDropdown(appId) {
+      document.getElementById(`statusDropdown-${appId}`).classList.toggle("show");
+    }
+    
+    // Update application status
+    async function updateApplicationStatus(appId, newStatus) {
+      const token = localStorage.getItem("token");
+      
+      try {
+        console.log(`Updating application ${appId} status to ${newStatus}`);
+        
+        // Check if token exists
+        if (!token) {
+          console.error("No authentication token found");
+          alert("You need to be logged in to update status. Please log in again.");
+          return;
+        }
+        
+        // Find the current application to check its status
+        const application = allApplications.find(app => app._id === appId);
+        if (!application) {
+          console.error("Application not found in memory:", appId);
+          alert("Error: Application not found. Please reload the page.");
+          return;
+        }
+        
+        // Define status order for chronological workflow enforcement
+        const statusOrder = {
+          "applied": 1,
+          "shortlisted": 2,
+          "interviewed": 3,
+          "offered": 4,
+          "rejected": 4 // same level as offered, an alternative final state
+        };
+        
+        // Check if trying to move backwards in status workflow
+        if (statusOrder[newStatus] < statusOrder[application.status]) {
+          console.error(`Cannot change status backward from ${application.status} to ${newStatus}`);
+          alert(`Error: Cannot change status from '${application.status.charAt(0).toUpperCase() + application.status.slice(1)}' to '${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}'. Status can only move forward in the workflow.`);
+          return;
+        }
+        
+        // Prevent changing from "offered" to "rejected"
+        if (application.status === "offered" && newStatus === "rejected") {
+          console.error("Cannot change status from offered to rejected");
+          alert("Error: Cannot change status from 'Offered' to 'Rejected'. Once a job is offered, it cannot be rejected.");
+          return;
+        }
+        
+        const url = `${serverBaseUrl}/api/applications/${appId}/status`;
+        console.log("Request URL:", url);
+        
+        const response = await fetch(url, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        
+        // Log detailed response information
+        console.log("Response status:", response.status);
+        console.log("Response ok:", response.ok);
+        
+        const responseText = await response.text();
+        console.log("Response text:", responseText);
+        
+        if (!response.ok) {
+          // Try to parse as JSON first
+          let errorMessage = "Failed to update status";
+          try {
+            if (responseText) {
+              const errorData = JSON.parse(responseText);
+              errorMessage = errorData.msg || errorMessage;
+            }
+          } catch (e) {
+            // If it's not valid JSON, use the text directly
+            errorMessage = responseText || errorMessage;
+          }
+          
+          throw new Error(errorMessage);
+        }
+        
+        // Close the dropdown
+        const dropdown = document.getElementById(`statusDropdown-${appId}`);
+        if (dropdown) {
+          dropdown.classList.remove("show");
+        }
+        
+        let result;
+        try {
+          result = JSON.parse(responseText);
+          console.log("Server response:", result);
+        } catch (e) {
+          console.warn("Could not parse response as JSON:", e);
+        }
+        
+        // Update application in memory and UI
+        const index = allApplications.findIndex(app => app._id === appId);
+        if (index !== -1) {
+          // Update the status in memory
+          allApplications[index].status = newStatus;
+          console.log("Updated application in memory:", allApplications[index]);
+        
+          // Refresh the detail view
+          viewApplicationDetail(appId);
+          
+          // Show a notification
+          alert(`Status updated to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`);
+        } else {
+          console.error("Application not found in memory:", appId);
+          alert("Status updated, but UI refresh failed. Please reload the page.");
+        }
+      } catch (error) {
+        console.error("Error updating status:", error);
+        alert(`Failed to update status: ${error.message}`);
+      }
+    }
+    
+    // Save application notes
+    async function saveApplicationNotes(appId) {
+      const token = localStorage.getItem("token");
+      const notes = document.getElementById("applicationNotes").value;
+      
+      try {
+        const response = await fetch(`${serverBaseUrl}/api/applications/${appId}/notes`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ notes })
+        });
+        
+        if (!response.ok) {
+          throw new Error("Failed to save notes");
+        }
+        
+        // Update the application in memory
+        const index = allApplications.findIndex(app => app._id === appId);
+        if (index !== -1) {
+          const updatedApp = await response.json();
+          allApplications[index] = { ...allApplications[index], ...updatedApp.application };
+        }
+        
+        // Show save confirmation
+        document.getElementById("notesSaveMsg").innerText = "Notes saved successfully!";
+        setTimeout(() => {
+          document.getElementById("notesSaveMsg").innerText = "";
+        }, 3000);
+      } catch (error) {
+        console.error("Error saving notes:", error);
+        document.getElementById("notesSaveMsg").innerText = "Error saving notes. Please try again.";
+      }
+    }
+    
+    // Back to applications list (for officer)
+    function backToApplicationsList() {
+      try {
+        console.log("Returning to applications list");
+        const applicationsList = document.querySelector("#officerApplications > div:first-child");
+        const detailContainer = document.getElementById("applicationDetail");
+        
+        if (!applicationsList || !detailContainer) {
+          console.error("Required DOM elements not found for back navigation");
+          return;
+        }
+        
+        applicationsList.style.display = "block";
+        detailContainer.style.display = "none";
+      } catch (error) {
+        console.error("Error in backToApplicationsList function:", error);
+      }
+    }
+    
+    // Filter applications for students
+    function applyStudentFilters() {
+      const status = document.getElementById("studentStatusFilter").value;
+      const searchText = document.getElementById("studentSearchInput").value.toLowerCase();
+      
+      let filteredApplications = [...studentApplications];
+      
+      if (status) {
+        filteredApplications = filteredApplications.filter(app => app.status === status);
+      }
+      
+      if (searchText) {
+        filteredApplications = filteredApplications.filter(app => 
+          app.job.title.toLowerCase().includes(searchText) ||
+          app.job.company.toLowerCase().includes(searchText)
+        );
+      }
+      
+      renderStudentApplicationsTable(filteredApplications);
+    }
+    
+    // Close dropdowns when clicking outside of them
+    window.onclick = function(event) {
+      if (!event.target.matches('.btn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+    
+    // Back to applications list (for student)
+    function backToStudentApplicationsList() {
+      try {
+        console.log("Returning to student applications list");
+        const applicationsList = document.querySelector("#studentApplications > div:first-child");
+        const detailContainer = document.getElementById("studentApplicationDetail");
+        
+        if (!applicationsList || !detailContainer) {
+          console.error("Required DOM elements not found for student back navigation");
+          return;
+        }
+        
+        applicationsList.style.display = "block";
+        detailContainer.style.display = "none";
+      } catch (error) {
+        console.error("Error in backToStudentApplicationsList function:", error);
+      }
+    }
+    
+    // Clear filters for officers
+    function clearFilters() {
+      document.getElementById("companyFilter").value = "";
+      document.getElementById("branchFilter").value = "";
+      document.getElementById("statusFilter").value = "";
+      document.getElementById("searchInput").value = "";
+      renderApplicationsByCompanyAndBranch(allApplications);
+    }
+    
+    // Clear filters for students
+    function clearStudentFilters() {
+      document.getElementById("studentStatusFilter").value = "";
+      document.getElementById("studentSearchInput").value = "";
+      renderStudentApplicationsTable(studentApplications);
+    }
+    
+    // Initialize the page on load
+    document.addEventListener("DOMContentLoaded", initPage);
+  </script>
+</body>
+</html> 

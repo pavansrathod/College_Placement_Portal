@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Placement Portal | SDMCET</title>
+    <meta name="description" content="SDMCET Placement Portal - Gateway to career opportunities for students">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Lexend+Deca:300,400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <link rel="stylesheet" href="./Css/home.css" />
+  </head>
+  <body>
+    <!-- Mobile Sidebar -->
+    <div class="overlay" id="overlay"></div>
+    <div class="sidebar" id="sidebar">
+      <button class="close-sidebar" id="closeSidebar">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="sidebar-header">
+        <img src="./assets/Sdm_logo.png" alt="SDMCET Logo" class="sidebar-logo">
+        <div class="sidebar-title">SDMCET Placement Portal</div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="./index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="./about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+        <li><a href="./contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
+        <li><a href="./register.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        <li><a href="https://sdmcet.ac.in/"><i class="fas fa-university"></i> SDMCET Website</a></li>
+      </ul>
+    </div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="hamburger" id="openSidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="bg">
+      <!-- header starts here -->
+      <div class="header">
+        <img class="himg" src="./assets/Sdm_logo.png" alt="SDMCET Logo" />
+        <p id="clgname">
+          SHRI DHARMASTHALA MANJUNATHESHWARA COLLEGE OF ENGINEERING AND TECHNOLOGY
+          <span class="d-block mt-1">DHAVALGIRI, DHARWAD</span>
+        </p>
+        <img class="himg" src="./assets/dvh.png" alt="DVH Logo" />
+      </div>
+      <!-- header ends here  -->
+
+      <!-- Navigation html starts here  -->
+      <center>
+        <div class="nav">
+          <a class="navb" href="./index.html"><i class="fas fa-home"></i> HOME</a>
+          <a class="navb" href="./about.html"><i class="fas fa-info-circle"></i> ABOUT US</a>
+          <a class="navb" href="./contact.html"><i class="fas fa-envelope"></i> CONTACT US</a>
+          <a class="navb" href="./register.html"><i class="fas fa-sign-in-alt"></i> LOGIN</a>
+        </div>
+      <!-- Navigation html ends here  -->
+
+      <div class="hero-content" data-aos="fade-up">
+        <h1><span class="welcome">WELCOME TO</span><br>PLACEMENT PORTAL</h1>
+        <p class="hcontent">At SDMCET, we believe that placement performance is one of the vital indicators of overall success of a professional institution.</p>
+        
+        <!-- Dashboard Overview Section -->
+        <div class="dashboard-overview" data-aos="fade-up" data-aos-delay="200">
+          <h2 class="dashboard-title">Placement Statistics</h2>
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+              <div class="stat-value" id="jobs-count">0</div>
+              <div class="stat-label">Total Jobs</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+              <div class="stat-value" id="applications-count">0</div>
+              <div class="stat-label">Total Applications</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+              <div class="stat-value" id="offers-count">0</div>
+              <div class="stat-label">Students Offered</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+              <div class="stat-value" id="placement-rate">0%</div>
+              <div class="stat-label">Placement Rate</div>
+            </div>
+          </div>
+          
+          <div class="department-offers">
+            <h3 class="dept-title">Offers by Department</h3>
+            <div class="dept-table-container">
+              <table class="dept-table">
+                <thead>
+                  <tr>
+                    <th>Department</th>
+                    <th>Number of Offers</th>
+                  </tr>
+                </thead>
+                <tbody id="dept-offers-body">
+                  <!-- Will be populated via JavaScript -->
+                  <tr><td colspan="2" class="loading-text">Loading department data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <a href="./register.html" data-aos="zoom-in" data-aos-delay="300"><button><i class="fas fa-briefcase"></i> APPLY FOR JOB</button></a>
+        
+      </div>
+      </div>  
+      </center>
+    
+    <section class="recruiters-section">
+      <center><h2 data-aos="fade-up">Our Recruiters</h2></center>
+      <center>
+      <div class="carousel" data-aos="fade-up" data-aos-delay="200">
+        <div class="cara">
+          <div
+            id="carouselExampleAutoplaying"
+            class="carousel slide"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="./assets/our_recrutiers1.png" class="d-block w-100" alt="Recruiters Group 1" />
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/our_recrutiers2.png" class="d-block w-100" alt="Recruiters Group 2" />
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/our_recrutiers3.png" class="d-block w-100" alt="Recruiters Group 3" />
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/our_recrutiers1.png" class="d-block w-100" alt="Recruiters Group 4" />
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/our_recrutiers3.png" class="d-block w-100" alt="Recruiters Group 5" />
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="prev"
+            >
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="next"
+            >
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      </center>
+    </section>
+    
+    <hr>
+
+    <!-- footer html starts here  -->
+    <div class="footer">
+      <div class="footer2">
+        <div class="quick">
+          <h3>QUICK LINKS</h3>
+          <a href="./contact.html"><p class="link"><i class="fas fa-angle-right"></i> Contact us</p></a>
+          <a href="./about.html"><p class="link"><i class="fas fa-angle-right"></i> About us</p></a>
+          <a href="./register.html"><p class="link"><i class="fas fa-angle-right"></i> Apply for job</p></a>
+        </div>
+        <div class="quick">
+          <h3>USEFUL LINKS</h3>
+          <a href="https://sdmcet.ac.in/"><p class="link"><i class="fas fa-angle-right"></i> Sdmcet Website</p></a>
+          <a href="#"><p class="link"><i class="fas fa-angle-right"></i> FAQ</p></a>
+          <a href="#"><p class="link"><i class="fas fa-angle-right"></i> Resources</p></a>
+        </div>
+        <div class="quick">
+          <h3>CONTACT INFO</h3>
+          <p class="link"><i class="fas fa-university"></i> SDM College of Engineering & Technology,</p>
+          <p class="link2"><i class="fas fa-map-marker-alt"></i> Kalaghatagi Road, Dharwad 580002, Karnataka, India. <br>
+            <i class="fas fa-phone"></i> 0836 - 244 7465 <br>
+            <i class="fas fa-envelope"></i> principal@sdmcet.ac.in <br>
+            <i class="fas fa-envelope"></i> cet.sdm@gmail.com</p>
+        </div>
+      </div>
+      <center>
+        <div class="social-links">
+          <a href="https://www.facebook.com/SdmCollegeofEngineering/" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/sdmcet_dwd/?hl=en" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="https://in.linkedin.com/school/sdm-college-of-engg-&-tech-dharwad/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p class="link2">© 2025 SDMCET, All rights reserved </p>
+      </center>
+    </div>
+    <!-- footer html ends here  -->
+    
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    // Initialize counters with loading placeholder
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const openSidebar = document.getElementById('openSidebar');
+      const closeSidebar = document.getElementById('closeSidebar');
+      
+      function toggleSidebar() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+      }
+      
+      openSidebar.addEventListener('click', toggleSidebar);
+      closeSidebar.addEventListener('click', toggleSidebar);
+      overlay.addEventListener('click', toggleSidebar);
+      
+      // Close sidebar when window is resized to desktop size
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Set initial loading state for counters
+      const counterElements = [
+        'student-count', 
+        'jobs-count', 
+        'applications-count', 
+        'offers-count'
+      ];
+      
+      counterElements.forEach(id => {
+        document.getElementById(id).textContent = "...";
+        // Add a subtle loading animation
+        document.getElementById(id).classList.add('counter-loading');
+      });
+
+      // Initial fetch of stats
+      fetchAndUpdateStats();
+      
+      // Start real-time updates with server-sent events or fallback to polling
+      startRealTimeUpdates();
+    });
+
+    // Start real-time updates using Server-Sent Events with polling fallback
+    function startRealTimeUpdates() {
+      // Try to use Server-Sent Events first if supported
+      if (typeof EventSource !== "undefined") {
+        const evtSource = new EventSource("http://localhost:5000/api/stats/live");
+        
+        evtSource.onmessage = function(event) {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.success) {
+              updateStatCounters(data.data);
+            }
+          } catch (error) {
+            console.error("Error processing SSE update:", error);
+          }
+        };
+        
+        evtSource.onerror = function() {
+          console.warn("SSE connection error, falling back to polling");
+          evtSource.close();
+          startPolling();
+        };
+      } else {
+        console.log("SSE not supported, using polling instead");
+        startPolling();
+      }
+    }
+    
+    // Fallback to polling if SSE is not available
+    function startPolling() {
+      // First immediate fetch
+      fetchAndUpdateStats();
+      
+      // Then set up continuous polling
+      setInterval(fetchAndUpdateStats, 2000);
+    }
+
+    // Helper function to check if the element contains a placeholder value
+    function isPlaceholder(element) {
+      return element.textContent === "..." || element.textContent === "";
+    }
+
+    // Function to animate counter
+    function animateCounter(element, start, end, duration) {
+      // Remove loading indicator if present
+      element.classList.remove('counter-loading');
+      
+      if (typeof start !== 'number' || typeof end !== 'number') {
+        element.textContent = end || 0;
+        return;
+      }
+      
+      // Skip animation for small changes or if start and end are identical
+      if (Math.abs(end - start) < 5 || start === end) {
+        element.textContent = end;
+        return;
+      }
+      
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const currentCount = Math.floor(progress * (end - start) + start);
+        element.textContent = currentCount;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+    
+    // Update statistics counters with new data
+    function updateStatCounters(stats) {
+      // Get counter elements
+      const studentCounter = document.getElementById('student-count');
+      const jobsCounter = document.getElementById('jobs-count');
+      const applicationsCounter = document.getElementById('applications-count');
+      const offersCounter = document.getElementById('offers-count');
+      
+      // Remove loading class from all counters
+      studentCounter.classList.remove('counter-loading');
+      jobsCounter.classList.remove('counter-loading');
+      applicationsCounter.classList.remove('counter-loading');
+      offersCounter.classList.remove('counter-loading');
+      
+      // Get current displayed values (or 0 if first load)
+      const currentStudents = parseInt(studentCounter.textContent) || 0;
+      const currentJobs = parseInt(jobsCounter.textContent) || 0;
+      const currentApplications = parseInt(applicationsCounter.textContent) || 0;
+      const currentOffers = parseInt(offersCounter.textContent) || 0;
+      
+      // Only animate if values have changed and are not placeholders
+      if (stats.students !== currentStudents && !isPlaceholder(studentCounter)) {
+        animateCounter(studentCounter, currentStudents, stats.students, 800);
+        highlightCounter(studentCounter);
+      } else if (isPlaceholder(studentCounter)) {
+        studentCounter.textContent = stats.students;
+      }
+      
+      if (stats.jobs !== currentJobs && !isPlaceholder(jobsCounter)) {
+        animateCounter(jobsCounter, currentJobs, stats.jobs, 800);
+        highlightCounter(jobsCounter);
+      } else if (isPlaceholder(jobsCounter)) {
+        jobsCounter.textContent = stats.jobs;
+      }
+      
+      if (stats.applications !== currentApplications && !isPlaceholder(applicationsCounter)) {
+        animateCounter(applicationsCounter, currentApplications, stats.applications, 800);
+        highlightCounter(applicationsCounter);
+      } else if (isPlaceholder(applicationsCounter)) {
+        applicationsCounter.textContent = stats.applications;
+      }
+      
+      if (stats.offers !== currentOffers && !isPlaceholder(offersCounter)) {
+        animateCounter(offersCounter, currentOffers, stats.offers, 800);
+        highlightCounter(offersCounter);
+      } else if (isPlaceholder(offersCounter)) {
+        offersCounter.textContent = stats.offers;
+      }
+    }
+    
+    // Function to highlight a counter that has changed
+    function highlightCounter(element) {
+      // Remove previous highlight animation if present
+      element.classList.remove('updated');
+      
+      // Force browser to recalculate styles (needed for animation to restart)
+      void element.offsetWidth;
+      
+      // Add highlight class
+      element.classList.add('updated');
+      
+      // Remove class after animation completes
+      setTimeout(() => {
+        element.classList.remove('updated');
+      }, 1000);
+    }
+
+    // Function to fetch stats from API and update counters (used for initial load and fallback)
+    function fetchAndUpdateStats() {
+      // Add cache busting query parameter to avoid browser caching
+      const cacheBuster = new Date().getTime();
+      fetch(`http://localhost:5000/api/stats?_=${cacheBuster}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            updateStatCounters(data.data);
+          } else {
+            console.error('API returned error:', data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching stats:', error);
+          
+          // Get counter elements
+          const counterElements = [
+            { id: 'student-count', defaultValue: 3000 },
+            { id: 'jobs-count', defaultValue: 150 },
+            { id: 'applications-count', defaultValue: 470 },
+            { id: 'offers-count', defaultValue: 300 }
+          ];
+          
+          // Replace placeholders with defaults, but keep real values
+          counterElements.forEach(counter => {
+            const element = document.getElementById(counter.id);
+            element.classList.remove('counter-loading');
+            
+            if (isPlaceholder(element)) {
+              element.textContent = counter.defaultValue;
+            }
+          });
+        });
+    }
+</script>
+
+<style>
+  .counter-loading {
+    animation: counter-pulse 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes counter-pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+  
+  .counter {
+    transition: color 0.3s ease;
+  }
+  
+  .counter.updated {
+    color: #EA7300; /* Highlight with accent color when updated */
+    animation: highlight-pulse 1s ease-out;
+  }
+  
+  @keyframes highlight-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Dashboard Overview Styles */
+  .dashboard-overview {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 25px;
+    margin: 30px auto;
+    max-width: 900px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-title {
+    color: #A62C2C;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 2px solid #E83F25;
+    padding-bottom: 10px;
+  }
+  
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  
+  .stat-card {
+    background: linear-gradient(145deg, #ffffff, #f5f5f5);
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(25% - 20px);
+    min-width: 160px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-card:nth-child(1) {
+    border-top-color: #A62C2C;
+  }
+  
+  .stat-card:nth-child(2) {
+    border-top-color: #34A853;
+  }
+  
+  .stat-card:nth-child(3) {
+    border-top-color: #4285F4;
+  }
+  
+  .stat-card:nth-child(4) {
+    border-top-color: #EA7300;
+  }
+  
+  .stat-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .stat-card:nth-child(1) .stat-icon {
+    color: #A62C2C;
+  }
+  
+  .stat-card:nth-child(2) .stat-icon {
+    color: #34A853;
+  }
+  
+  .stat-card:nth-child(3) .stat-icon {
+    color: #4285F4;
+  }
+  
+  .stat-card:nth-child(4) .stat-icon {
+    color: #EA7300;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .stat-label {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .department-offers {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  }
+  
+  .dept-title {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dept-title:before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background-color: #A62C2C;
+    margin-right: 10px;
+    border-radius: 2px;
+  }
+  
+  .dept-table-container {
+    overflow-x: auto;
+  }
+  
+  .dept-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .dept-table th {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .dept-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .dept-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .dept-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .loading-text {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .dashboard-overview {
+      padding: 15px;
+      margin: 20px 10px;
+    }
+    
+    .stats-container {
+      gap: 10px;
+    }
+    
+    .stat-card {
+      width: calc(50% - 10px);
+      min-width: 120px;
+      padding: 15px 10px;
+    }
+    
+    .stat-icon {
+      font-size: 22px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<!-- Add JavaScript to populate departments data -->
+<script>
+  // Function to fetch and populate the dashboard data
+  async function fetchDashboardData() {
+    try {
+      // First try to fetch as a logged-in user with token
+      let response;
+      if (localStorage.getItem('token')) {
+        response = await fetch('http://localhost:5000/api/applications/stats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+      } else {
+        // For public access, try the public endpoint
+        response = await fetch('http://localhost:5000/api/public/stats');
+      }
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const stats = await response.json();
+      
+      // Update all stat values with real data
+      document.getElementById('jobs-count').textContent = stats.totalJobs || 0;
+      document.getElementById('applications-count').textContent = stats.totalApplications || 0;
+      
+      // Get student and offer counts
+      const totalStudents = stats.totalStudents || 0;
+      let offeredCount = stats.offeredStudentCount || 0;
+      
+      // Fallback to applications by status if offeredStudentCount isn't available
+      if (!offeredCount && stats.applicationsByStatus && stats.applicationsByStatus['offered']) {
+        offeredCount = stats.applicationsByStatus['offered'];
+      }
+      
+      // Update offers count
+      document.getElementById('offers-count').textContent = offeredCount;
+      
+      // Calculate placement rate using the specified logic
+      let placementRate = stats.placementPercentage;
+      
+      if (!placementRate && totalStudents > 0) {
+        placementRate = ((offeredCount / totalStudents) * 100).toFixed(2);
+      }
+      
+      // Update placement rate display
+      document.getElementById('placement-rate').textContent = (placementRate || 0) + '%';
+      
+      // Populate department table
+      const tbody = document.getElementById('dept-offers-body');
+      
+      if (stats.offeredStudents && stats.offeredStudents.length > 0) {
+        tbody.innerHTML = '';
+        
+        stats.offeredStudents.forEach((dept) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${dept._id || 'Not Specified'}</td>
+            <td>${dept.count}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        
+        // Add a total row
+        const totalRow = document.createElement('tr');
+        totalRow.style.fontWeight = 'bold';
+        totalRow.style.backgroundColor = '#f7f7f7';
+        
+        const total = stats.offeredStudents.reduce((sum, dept) => sum + dept.count, 0);
+        
+        totalRow.innerHTML = `
+          <td>Total</td>
+          <td>${total}</td>
+        `;
+        
+        tbody.appendChild(totalRow);
+      } else {
+        tbody.innerHTML = '<tr><td colspan="2" class="loading-text">No department data available</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      showSampleData();
+    }
+  }
+  
+  // Function to show sample data for non-logged in users
+  function showSampleData() {
+    // Set sample values for counters
+    document.getElementById('jobs-count').textContent = 150;
+    document.getElementById('applications-count').textContent = 470;
+    document.getElementById('offers-count').textContent = 300;
+    document.getElementById('placement-rate').textContent = '85.7%';
+    
+    // Show sample department data
+    document.getElementById('dept-offers-body').innerHTML = `
+      <tr><td>Computer Science</td><td>45</td></tr>
+      <tr><td>Information Science</td><td>35</td></tr>
+      <tr><td>Electronics & Communication</td><td>30</td></tr>
+      <tr><td>Mechanical Engineering</td><td>25</td></tr>
+      <tr><td>Civil Engineering</td><td>15</td></tr>
+      <tr style="font-weight: bold; background-color: #f7f7f7;"><td>Total</td><td>150</td></tr>
+    `;
+  }
+  
+  // Try to fetch dashboard data, show sample data if fails
+  document.addEventListener('DOMContentLoaded', function() {
+    fetchDashboardData();
+  });
+</script>
+</body>
+</html>

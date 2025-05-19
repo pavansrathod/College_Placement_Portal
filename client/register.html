@@ -1,0 +1,263 @@
+<!-- client/register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - College Placement Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f0f5ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 400px;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #A62C2C;
+      margin-bottom: 30px;
+    }
+    
+    p {
+      color: #7f8c8d;
+      margin-top: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+      font-weight: bold;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+    
+    input:focus, select:focus {
+      border-color: #A62C2C;
+      outline: none;
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #A62C2C;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background-color: #E83F25;
+    }
+    
+    .message {
+      margin-top: 20px;
+      color: #e74c3c;
+    }
+    
+    .success {
+      color: #EA7300;
+    }
+    
+    .links {
+      margin-top: 20px;
+    }
+    
+    .links a {
+      color: #EA7300;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Create Account</h1>
+    
+  <form id="registerForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Create a password" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="role">Account Type</label>
+        <select id="role">
+          <option value="student">Student</option>
+          <option value="officer">Placement Officer</option>
+        </select>
+      </div>
+      
+      <div class="form-group" id="studentFieldsContainer" style="display: none;">
+        <label for="department">Department/Branch</label>
+        <select id="department">
+          <option value="">Select your branch</option>
+          <option value="Computer Science Engineering">Computer Science Engineering</option>
+          <option value="Information Science">Information Science</option>
+          <option value="Electronics and Communication">Electronics and Communication</option>
+          <option value="AIML">AIML</option>
+          <option value="Electrical and Electronics">Electrical and Electronics</option>
+          <option value="Civil">Civil</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Chemical">Chemical</option>
+        </select>
+      </div>
+      
+    <button type="submit">Register</button>
+  </form>
+
+    <p id="registerMsg" class="message"></p>
+    
+    <div class="links">
+      <a href="login.html">Already have an account? Login</a>
+      <a href="index.html">Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is already logged in - redirect if they are
+    function checkLoginStatus() {
+      const token = localStorage.getItem("token");
+      
+      if (token) {
+        try {
+          // Verify token validity by checking expiration
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          const currentTime = Math.floor(Date.now() / 1000);
+          
+          if (payload.exp && payload.exp > currentTime) {
+            // Valid token, redirect to dashboard
+            window.location.href = "dashboard.html";
+            return;
+          } else {
+            // Expired token
+            localStorage.removeItem("token");
+          }
+        } catch (e) {
+          // Invalid token format
+          localStorage.removeItem("token");
+        }
+      }
+    }
+    
+    // Run the check when page loads
+    window.addEventListener('DOMContentLoaded', checkLoginStatus);
+    
+    // Show/hide student fields based on role selection
+    document.getElementById("role").addEventListener("change", function() {
+      const studentFields = document.getElementById("studentFieldsContainer");
+      if (this.value === "student") {
+        studentFields.style.display = "block";
+      } else {
+        studentFields.style.display = "none";
+      }
+    });
+    
+    // Initialize student fields visibility based on default role
+    document.addEventListener("DOMContentLoaded", function() {
+      const roleSelect = document.getElementById("role");
+      const studentFields = document.getElementById("studentFieldsContainer");
+      if (roleSelect.value === "student") {
+        studentFields.style.display = "block";
+      }
+    });
+    
+    // Handle registration form submission
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value;
+      
+      // Collect registration data
+      const registrationData = { name, email, password, role };
+      
+      // Add department if student role is selected
+      if (role === "student") {
+        const department = document.getElementById("department").value;
+        if (!department) {
+          document.getElementById("registerMsg").innerText = "Please select your department/branch";
+          return;
+        }
+        registrationData.department = department;
+      }
+      
+      document.getElementById("registerMsg").innerText = "Registering...";
+      document.getElementById("registerMsg").className = "message";
+      
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(registrationData),
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          document.getElementById("registerMsg").innerText = "Registration successful! Redirecting to login...";
+          document.getElementById("registerMsg").className = "message success";
+          
+          // Clear the form
+          document.getElementById("registerForm").reset();
+          
+          // Redirect to login page after 2 seconds
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+        } else {
+          document.getElementById("registerMsg").innerText = data.msg || "Registration failed. Please try again.";
+        }
+      } catch (err) {
+        document.getElementById("registerMsg").innerText = "Server error. Please try again later.";
+      }
+    });
+  </script>
+</body>
+</html>

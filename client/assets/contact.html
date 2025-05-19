@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact us</title>
+    <link rel="stylesheet" href="./Css/contact.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend Deca"
+      rel="stylesheet"
+    />
+    
+  </head>
+  <body background="./assets/Login_bg.png">
+    <div class="header">
+      <img class="himg" src="./assets/Sdm_logo.png" alt="" />
+      <p id="clgname">
+        SHRI DHARMASTHALA MANJUNATHESHWARA COLLEGE OF ENGINEERING AND TECHNOLOGY
+        DHAVALGIRI, DHARWAD
+      </p>
+      <img class="himg" src="./assets/dvh.png" alt="" />
+    </div>
+  
+    <!-- Navigation html starts here  -->
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <center>
+      <div class="nav">
+        <a class="navb" href="./index.html">HOME</a>
+        <a class="navb" href="./about.html">ABOUT US</a>
+        <a class="navb" href="./contact.html">CONTACT US</a>
+        <a class="navb" href="./login.html">LOGIN</a>
+       
+      </div>
+    
+      <div id="mobileNav" class="mobile-nav">
+        <ul class="unorder">
+            <li> <a class="navmb" href="./index.html">HOME</a></li>
+            <li><a class="navmb" href="./about.html">ABOUT US</a></li>
+            <li><a class="navmb" href="./contact.html">CONTACT US</a></li>
+            <li> <a class="navmb" href="./login.html">LOGIN</a></li>
+            
+        </ul>
+    </div>
+  </center>
+    <!-- Navigation html ends here  -->
+    <br>
+    <div class="container">
+      <form action="./contact.php" method="POST">
+        <div class="usn">
+         <p>USN</p>
+          <input type="text" name="usn" placeholder="2SD21Example" required>
+          <p>E-MAIL</p>
+          <input type="text" name="mail" required>
+          <p>SUBJECT</p>
+          <input type="text" name="sub" required>
+          <P>MESSAGE</P>
+          <textarea name="msg" id="msg" cols="42" rows="8" required></textarea>
+          <button id="signin">Submit</button>
+       </div>
+       </form>
+      <div class="faltu">
+          <h1>Contact Info</h1>
+          <h2>SDM College of Engineering & Technology, Dharwad</h2>
+          <p>Kalaghatagi Road, Dharwad 580002, <br>
+            Karnataka, India.<br>
+            Cell: 0836 - 244 7465<br>
+            Email: principal@sdmcet.ac.in<br>
+            Email: cet.sdm@gmail.com</p>
+          <h1>Quick Links</h1><br>
+          <a href="">Contact Us</a><br>
+          <a href="">About Us</a><br>
+          <a href="">Apply For Job</a><br>
+          <a href="">Profile</a><br>
+          <a href="">SDMCET Website</a><br>
+      </div>
+  
+  <script>
+  //navigation js starts here
+  function toggleMenu() {
+    const mobileNav = document.getElementById('mobileNav');
+    mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
+  }
+  // navigation js ends here
+    </script>
+  </body>
+</html>

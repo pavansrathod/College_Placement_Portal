@@ -1,0 +1,188 @@
+<!-- client/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - College Placement Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #f0f5ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 400px;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #A62C2C;
+      margin-bottom: 30px;
+    }
+    
+    p {
+      color: #7f8c8d;
+      margin-top: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+      font-weight: bold;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+    
+    input:focus {
+      border-color: #A62C2C;
+      outline: none;
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #A62C2C;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background-color: #E83F25;
+    }
+    
+    .message {
+      margin-top: 20px;
+      color: #e74c3c;
+    }
+    
+    .links {
+      margin-top: 20px;
+    }
+    
+    .links a {
+      color: #EA7300;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Login</h1>
+    
+  <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email Address</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required />
+      </div>
+      
+    <button type="submit">Login</button>
+  </form>
+
+    <p id="loginMsg" class="message"></p>
+    
+    <div class="links">
+      <a href="register.html">New user? Register</a>
+      <a href="index.html">Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is already logged in - redirect if they are
+    function checkLoginStatus() {
+      const token = localStorage.getItem("token");
+      
+      if (token) {
+        try {
+          // Verify token validity by checking expiration
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          const currentTime = Math.floor(Date.now() / 1000);
+          
+          if (payload.exp && payload.exp > currentTime) {
+            // Valid token, redirect to dashboard
+            window.location.href = "dashboard.html";
+            return;
+          } else {
+            // Expired token
+            localStorage.removeItem("token");
+          }
+        } catch (e) {
+          // Invalid token format
+          localStorage.removeItem("token");
+        }
+      }
+    }
+    
+    // Run the check when page loads
+    window.addEventListener('DOMContentLoaded', checkLoginStatus);
+    
+    // Handle login form submission
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      
+      document.getElementById("loginMsg").innerText = "Logging in...";
+      
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          localStorage.setItem("token", data.token);
+          window.location.href = "dashboard.html";
+        } else {
+          document.getElementById("loginMsg").innerText = data.msg || "Login failed. Please check your credentials.";
+        }
+      } catch (err) {
+        document.getElementById("loginMsg").innerText = "Server error. Please try again later.";
+      }
+    });
+  </script>
+</body>
+</html>

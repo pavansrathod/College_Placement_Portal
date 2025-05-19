@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | College Placement Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --primary-color: #A62C2C;
+      --secondary-color: #E83F25;
+      --danger-color: #e74c3c;
+      --dark-color: #2c3e50;
+      --light-color: #f5f8fa;
+      --text-color: #333;
+      --gray-color: #95a5a6;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      background-color: var(--light-color);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Header Styles */
+    .header {
+      background-color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--dark-color);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    
+    .user-role {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    
+    .logout-btn {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .logout-btn:hover {
+      opacity: 0.9;
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.2rem;
+      color: var(--dark-color);
+    }
+    
+    .card-icon {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    
+    .card-value {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    
+    .card-description {
+      color: var(--gray-color);
+      font-size: 0.9rem;
+    }
+    
+    /* Section Styles */
+    .section {
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+    
+    /* Job Styles */
+    .job-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1rem;
+    }
+
+    .job-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      border-left: 4px solid var(--primary-color);
+      transition: var(--transition);
+    }
+    
+    .job-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .job-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-company {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-detail {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+    
+    .job-detail i {
+      width: 20px;
+      color: var(--gray-color);
+      margin-right: 0.5rem;
+    }
+    
+    .job-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    /* Resume Upload */
+    .upload-section {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      margin-top: 1rem;
+      display: inline-block;
+    }
+    
+    .file-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-input-label {
+      display: inline-block;
+      padding: 0.7rem 1.2rem;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .file-input-label:hover {
+      background-color: #2980b9;
+    }
+    
+    .file-name {
+      margin-left: 1rem;
+    }
+    
+    /* Chart Container */
+    .chart-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      height: 300px;
+      position: relative;
+    }
+    
+    /* Actions Container */
+    .actions-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .action-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      transition: var(--transition);
+      text-decoration: none;
+      color: var(--text-color);
+    }
+    
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .action-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    
+    .action-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .action-badge {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* Loading Indicator */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-color);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .job-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .actions-container {
+        flex-direction: column;
+      }
+      
+      .header {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      
+      .user-info {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">College Placement Portal</div>
+    <div class="user-info">
+      <div>
+        <span id="userName" class="user-name"></span>
+        <span id="userRole" class="user-role"></span>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Officer Dashboard -->
+    <div id="officerDashboard" style="display: none;">
+      <div class="actions-container">
+        <a href="post-job.html" class="action-card">
+          <i class="fas fa-plus-circle action-icon"></i>
+          <h3 class="action-title">Post New Job</h3>
+        </a>
+        <a href="jobs-posted.html" class="action-card">
+          <i class="fas fa-clipboard-list action-icon"></i>
+          <h3 class="action-title">View Posted Jobs</h3>
+        </a>
+        <a href="applications.html" class="action-card">
+          <i class="fas fa-file-alt action-icon"></i>
+          <h3 class="action-title">Manage Applications</h3>
+        </a>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">Dashboard Overview</h2>
+        <div id="dashboardStats" class="dashboard-grid">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">Recent Applications</h2>
+        <div class="chart-container" id="applicationsChart">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">Jobs with Most Applications</h2>
+        <div id="topJobs" class="job-list">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="studentDashboard" style="display: none;">
+      <div class="actions-container">
+        <a href="applications.html" class="action-card">
+          <i class="fas fa-file-alt action-icon"></i>
+          <h3 class="action-title">My Applications</h3>
+          <span id="applicationsCount" class="action-badge">0</span>
+        </a>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">My Profile</h2>
+        <div class="card">
+          <div id="profileInfo" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+              <h3 style="margin-bottom: 1rem;">Personal Information</h3>
+              <form id="profileForm">
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Name</label>
+                  <input type="text" id="profileName" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd;" required>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+                  <input type="email" id="profileEmail" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd;" readonly>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Branch</label>
+                  <select id="profileBranch" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd; padding: 0.7rem;" required>
+                    <option value="">Select Branch</option>
+                    <option value="Computer Science Engineering">Computer Science Engineering</option>
+                    <option value="Information Science">Information Science</option>
+                    <option value="Electronics and Communication">Electronics and Communication</option>
+                    <option value="AIML">AIML</option>
+                    <option value="Electrical and Electronics">Electrical and Electronics</option>
+                    <option value="Civil">Civil</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Chemical">Chemical</option>
+                  </select>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Roll Number</label>
+                  <input type="text" id="profileRollNumber" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd;" required>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">CGPA</label>
+                  <input type="number" id="profileCGPA" min="0" max="10" step="0.01" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd;" required>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone Number</label>
+                  <input type="tel" id="profilePhone" class="file-input-label" style="width: 100%; font-weight: normal; background-color: white; color: var(--text-color); border: 1px solid #ddd;">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                  Update Profile
+                </button>
+                <p id="profileMsg" style="margin-top: 1rem; color: var(--secondary-color);"></p>
+              </form>
+            </div>
+            
+            <div style="flex: 1; min-width: 300px;">
+              <h3 style="margin-bottom: 1rem;">Resume</h3>
+              <div id="resumeStatus" style="margin-bottom: 1rem;">
+                <p>Current Resume: <span id="currentResume">None</span></p>
+              </div>
+              
+              <form id="resumeForm" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                  <label class="file-input-label">
+                    <i class="fas fa-upload"></i> Choose PDF File
+                    <input type="file" id="resumeFile" accept=".pdf" class="file-input" required />
+                  </label>
+                  <span id="fileName" class="file-name"></span>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                  Upload Resume
+                </button>
+                <p id="resumeMsg" style="margin-top: 1rem; color: var(--secondary-color);"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">
+          Available Opportunities
+          <span class="new-badge" style="background-color: var(--secondary-color); color: white; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 20px; margin-left: 0.5rem; vertical-align: middle; font-weight: normal;">
+            <span id="opportunitiesCount">0</span> New
+          </span>
+        </h2>
+        <div id="jobList" class="job-list">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Include Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

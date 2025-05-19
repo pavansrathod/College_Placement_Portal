@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Token Validation Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+    .warning {
+      color: orange;
+    }
+    button {
+      padding: 10px 15px;
+      background: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    .notice {
+      background: #fff3cd;
+      border: 1px solid #ffe69c;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>JWT Token Validation Tool</h1>
+  
+  <div class="notice">
+    <p><strong>Note:</strong> This tool validates JWT tokens locally without making server API calls. Use it to verify your authentication token for the College Placement Portal.</p>
+  </div>
+  
+  <div>
+    <h2>Your current token</h2>
+    <pre id="current-token">No token found in localStorage</pre>
+    <div id="token-info"></div>
+    <button id="clear-token">Clear Token</button>
+  </div>
+  
+  <div>
+    <h2>Decode Token</h2>
+    <button id="test-token">Decode Token</button>
+    <pre id="token-result">Results will appear here</pre>
+  </div>
+  
+  <div>
+    <h2>Check Token Expiration</h2>
+    <button id="check-expiration">Check Expiration</button>
+    <pre id="expiration-result">Results will appear here</pre>
+  </div>
+  
+  <div>
+    <h2>Manual Token Input</h2>
+    <div>
+      <label for="manual-token">JWT Token:</label>
+      <input type="text" id="manual-token" placeholder="Paste a JWT token here">
+    </div>
+    <button id="save-token">Save Token</button>
+    <button id="decode-manual-token">Decode This Token</button>
+    <pre id="manual-token-result">Results will appear here</pre>
+  </div>
+  
+  <div>
+    <h2>Login (redirects to regular login page)</h2>
+    <button id="login-btn">Go to Login Page</button>
+  </div>
+  
+  <script>
+    // Load and display token on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      const tokenDisplay = document.getElementById('current-token');
+      const tokenInfo = document.getElementById('token-info');
+      
+      if (token) {
+        tokenDisplay.textContent = token;
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          tokenInfo.innerHTML = `<div><strong>User:</strong> ${payload.name || 'Unknown'}</div>
+                                <div><strong>Role:</strong> ${payload.role || 'Unknown'}</div>
+                                <div><strong>ID:</strong> ${payload.id || 'Unknown'}</div>`;
+        } catch (e) {
+          tokenInfo.innerHTML = `<div class="error">Error decoding token: ${e.message}</div>`;
+        }
+      }
+    });
+    
+    // Decode token without making API call
+    document.getElementById('test-token').addEventListener('click', function() {
+      const resultDisplay = document.getElementById('token-result');
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        resultDisplay.innerHTML = '<span class="error">No token found in localStorage</span>';
+        return;
+      }
+      
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+          throw new Error('Token is not in valid JWT format (should have 3 parts)');
+        }
+        
+        // Base64 decode and parse
+        const header = JSON.parse(atob(parts[0]));
+        const payload = JSON.parse(atob(parts[1]));
+        
+        resultDisplay.textContent = 'Token decoded successfully:\n\n';
+        resultDisplay.textContent += 'Header:\n' + JSON.stringify(header, null, 2) + '\n\n';
+        resultDisplay.textContent += 'Payload:\n' + JSON.stringify(payload, null, 2);
+      } catch (e) {
+        resultDisplay.innerHTML = `<span class="error">Error decoding token: ${e.message}</span>`;
+      }
+    });
+    
+    // Check if token is expired
+    document.getElementById('check-expiration').addEventListener('click', function() {
+      const resultDisplay = document.getElementById('expiration-result');
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        resultDisplay.innerHTML = '<span class="error">No token found in localStorage</span>';
+        return;
+      }
+      
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+          throw new Error('Token is not in valid JWT format');
+        }
+        
+        // Decode payload and check exp claim
+        const payload = JSON.parse(atob(parts[1]));
+        
+        if (!payload.exp) {
+          resultDisplay.innerHTML = '<span class="warning">Token does not have an expiration claim</span>';
+          return;
+        }
+        
+        const expirationDate = new Date(payload.exp * 1000); // Convert seconds to milliseconds
+        const now = new Date();
+        
+        const isExpired = now > expirationDate;
+        
+        if (isExpired) {
+          resultDisplay.innerHTML = `<span class="error">Token is expired!</span>\n\nExpired on: ${expirationDate.toLocaleString()}`;
+        } else {
+          const timeRemaining = expirationDate - now;
+          const hoursRemaining = Math.floor(timeRemaining / (1000 * 60 * 60));
+          const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          
+          resultDisplay.innerHTML = `<span class="success">Token is valid</span>\n\nExpires on: ${expirationDate.toLocaleString()}\nTime remaining: ${hoursRemaining} hours, ${minutesRemaining} minutes`;
+        }
+      } catch (e) {
+        resultDisplay.innerHTML = `<span class="error">Error checking expiration: ${e.message}</span>`;
+      }
+    });
+    
+    // Save manually entered token
+    document.getElementById('save-token').addEventListener('click', function() {
+      const tokenInput = document.getElementById('manual-token').value.trim();
+      
+      if (!tokenInput) {
+        alert('Please enter a token');
+        return;
+      }
+      
+      localStorage.setItem('token', tokenInput);
+      alert('Token saved to localStorage');
+      window.location.reload(); // Reload to update the current token display
+    });
+    
+    // Decode manually entered token
+    document.getElementById('decode-manual-token').addEventListener('click', function() {
+      const resultDisplay = document.getElementById('manual-token-result');
+      const tokenInput = document.getElementById('manual-token').value.trim();
+      
+      if (!tokenInput) {
+        resultDisplay.innerHTML = '<span class="error">Please enter a token</span>';
+        return;
+      }
+      
+      try {
+        const parts = tokenInput.split('.');
+        if (parts.length !== 3) {
+          throw new Error('Token is not in valid JWT format (should have 3 parts)');
+        }
+        
+        // Base64 decode and parse
+        const header = JSON.parse(atob(parts[0]));
+        const payload = JSON.parse(atob(parts[1]));
+        
+        resultDisplay.textContent = 'Token decoded successfully:\n\n';
+        resultDisplay.textContent += 'Header:\n' + JSON.stringify(header, null, 2) + '\n\n';
+        resultDisplay.textContent += 'Payload:\n' + JSON.stringify(payload, null, 2);
+      } catch (e) {
+        resultDisplay.innerHTML = `<span class="error">Error decoding token: ${e.message}</span>`;
+      }
+    });
+    
+    // Clear token
+    document.getElementById('clear-token').addEventListener('click', function() {
+      localStorage.removeItem('token');
+      document.getElementById('current-token').textContent = 'Token cleared!';
+      document.getElementById('token-info').innerHTML = '';
+      setTimeout(() => {
+        document.getElementById('current-token').textContent = 'No token found in localStorage';
+      }, 3000);
+    });
+    
+    // Login redirect
+    document.getElementById('login-btn').addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html> 
